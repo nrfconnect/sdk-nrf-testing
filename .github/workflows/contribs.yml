@@ -20,4 +20,4 @@ jobs:
           github-token: ${{ secrets.ORG_GITHUB_TOKEN }}
           command: 'external'
           message: 'test message'
-          label: 'test label'
+          labels: 'test label 1, test label 2'
