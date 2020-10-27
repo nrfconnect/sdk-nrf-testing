@@ -1,6 +1,6 @@
 name: Contribs
 on:
-  pull_request_target
+  pull_request_target:
     types: [opened, reopened]
 #schedule:
 #    - cron:  '*/15 * * * *'
