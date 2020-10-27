@@ -17,7 +17,7 @@ jobs:
       - name: Contribs
         uses: carlescufi/action-contribs@main
         with:
-          github-token: ${{ secrets.ORG_GITHUB_TOKEN }}
+          github-token: ${{ secrets.NCS_GITHUB_TOKEN }}
           command: 'external'
           message: 'test message'
           labels: 'test label 1, test label 2'
