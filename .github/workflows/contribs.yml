@@ -1,0 +1,23 @@
+name: Contribs
+on:
+  pull_request_target
+    types: [opened, reopened]
+#schedule:
+#    - cron:  '*/15 * * * *'
+#  pull_request_target:
+#    types:
+#      - closed
+#      - labeled
+
+jobs:
+  contribs:
+    runs-on: ubuntu-latest
+    name: Contribs
+    steps:
+      - name: Contribs
+        uses: carlescufi/action-contribs@main
+        with:
+          github-token: ${{ secrets.ORG_GITHUB_TOKEN }}
+          command: 'external'
+          message: 'test message'
+          label: 'test label'
