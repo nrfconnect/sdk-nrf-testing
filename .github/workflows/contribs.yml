@@ -14,9 +14,10 @@ jobs:
           github-token: ${{ secrets.NCS_GITHUB_TOKEN }}
           command: 'external'
           messages: |
-                   test message
-                   new line
-                   |
-                   second message
-                   another line
-          labels: 'test label 1, test label 2'
+                    Thank you your contribution!
+                    It seems you are not a member of the nrfconnect GitHub organization.
+                    We are currently not accepting external contributions, but this may change soon.
+                    Please use https://devzone.nordicsemi.com/ for further information.
+                    |
+                    The author of this Pull Request is now a member of the nrfconnect GitHub organization.
+          labels: 'external'
