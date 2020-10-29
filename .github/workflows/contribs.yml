@@ -19,5 +19,5 @@ jobs:
         with:
           github-token: ${{ secrets.NCS_GITHUB_TOKEN }}
           command: 'external'
-          message: 'test message'
+          message: 'test message | second message'
           labels: 'test label 1, test label 2'
