@@ -20,9 +20,9 @@ jobs:
           github-token: ${{ secrets.NCS_GITHUB_TOKEN }}
           command: 'external'
           messages: |
-                   'test message'
-                   'new line'
-                   '|'
-                   'second message'
-                   'another line'
+                   test message
+                   new line
+                   |
+                   second message
+                   another line
           labels: 'test label 1, test label 2'
