@@ -11,7 +11,7 @@ jobs:
       - name: Contribs
         uses: carlescufi/action-contribs@main
         with:
-          github-token: ${{ secrets.NCS_GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           command: 'external'
           messages: |
                     Thank you your contribution!
