@@ -1,0 +1,18 @@
+name: Manifest
+on:
+  pull_request_target:
+    types: [opened, reopened]
+
+jobs:
+  contribs:
+    runs-on: ubuntu-latest
+    name: Manifest
+    steps:
+      - name: Manifest
+        uses: carlescufi/action-manifest@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          manifest-path: 'west.yml'
+          messages: |
+                    Test message for the manifest.
+          labels: 'manifest'
