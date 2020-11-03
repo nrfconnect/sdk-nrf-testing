@@ -5,6 +5,8 @@ nRF Connect SDK: sdk-nrf
    :local:
    :depth: 2
 
+Test text.
+
 This repository contains the Nordic-specific source code additions to open
 source projects (Zephyr RTOS and MCUboot).
 It must be combined with nrfxlib and the repositories that use the same
