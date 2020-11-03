@@ -103,6 +103,7 @@ manifest:
       path: nrfxlib
       revision: 50ef19254346847287fb078e7dcaa092256b478f
     # Other third-party repositories.
+    # Test comment
     - name: cmock
       path: test/cmock
       revision: c243b9a7a7b3c471023193992b46cf1bd1910450
