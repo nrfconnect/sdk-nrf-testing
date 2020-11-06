@@ -3,6 +3,8 @@
 #
 # SPDX-License-Identifier: LicenseRef-BSD-5-Clause-Nordic
 #
+# Add line
+
 if (CONFIG_FW_INFO)
   zephyr_library()
   zephyr_library_sources(fw_info.c)
