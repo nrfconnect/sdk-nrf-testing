@@ -12,6 +12,7 @@ jobs:
         uses: carlescufi/action-manifest@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          verbosity: '1'
           manifest-path: 'west.yml'
           messages: |
                     Test message for the manifest.
