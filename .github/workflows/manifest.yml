@@ -15,4 +15,5 @@ jobs:
           manifest-path: 'west.yml'
           messages: |
                     Test message for the manifest.
-          labels: 'manifest'
+          labels: 'DNM', 'manifest', 'west'
+          label-prefix: 'manifest-'
