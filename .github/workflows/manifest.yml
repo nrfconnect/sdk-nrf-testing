@@ -12,9 +12,10 @@ jobs:
         uses: carlescufi/action-manifest@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          label-prefix: 'manifest-'
-          verbosity: '1'
           manifest-path: 'west.yml'
+          label-prefix: 'manifest-'
+          verbosity-level: '1'
           messages: |
                     Test message for the manifest.
-          labels: 'DNM, manifest, west'
+          labels: 'manifest, west'
+          dnm-labels: 'DNM'
