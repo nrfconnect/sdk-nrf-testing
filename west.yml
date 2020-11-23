@@ -110,7 +110,7 @@ manifest:
       remote: throwtheswitch
     - name: unity
       path: test/cmock/vendor/unity
-      revision: 031f3bbe45f8adf504ca3d13e6f093869920b091
+      revision: 386c540510929c0cf6f7b8d04cb4af40754bb822
       remote: throwtheswitch
     - name: mbedtls-nrf
       path: mbedtls
