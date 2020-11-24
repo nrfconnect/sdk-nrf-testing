@@ -15,7 +15,7 @@ jobs:
           manifest-path: 'west.yml'
           label-prefix: 'manifest-'
           verbosity-level: '1'
-          messages: |
-                    Test message for the manifest.
+          message: |
+                   'sdk-nrf-testing message'
           labels: 'manifest, west'
           dnm-labels: 'DNM'
