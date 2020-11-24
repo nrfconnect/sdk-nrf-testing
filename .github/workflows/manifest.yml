@@ -1,7 +1,6 @@
 name: Manifest
 on:
-  pull_request_target:
-    types: [opened, reopened]
+  - pull_request_target
 
 jobs:
   contribs:
@@ -15,9 +14,5 @@ jobs:
           manifest-path: 'west.yml'
           label-prefix: 'manifest-'
           verbosity-level: '1'
-          message: |
-                   sdk-nrf-testing message
-                   second line
-
           labels: 'manifest, west'
           dnm-labels: 'DNM'
