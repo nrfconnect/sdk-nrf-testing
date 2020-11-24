@@ -11,7 +11,7 @@ jobs:
       - name: Manifest
         uses: carlescufi/action-manifest@main
         with:
-          github-token: ${{ secrets.NCS_GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
           manifest-path: 'west.yml'
           label-prefix: 'manifest-'
           verbosity-level: '1'
