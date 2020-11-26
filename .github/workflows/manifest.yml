@@ -15,4 +15,5 @@ jobs:
           label-prefix: 'manifest-'
           verbosity-level: '1'
           labels: 'manifest, west'
+          where: 'description'
           dnm-labels: 'DNM'
