@@ -11,6 +11,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           path: ncs/nrf
+          fetch-depth: 0
 
       - name: Manifest
         uses: carlescufi/action-manifest@main
