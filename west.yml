@@ -118,7 +118,7 @@ manifest:
       remote: armmbed
     - name: nanopb
       path: modules/lib/nanopb
-      revision: nanopb-0.4.1
+      revision: nanopb-0.4.2
       remote: nanopb
     - name: Alexa-Gadgets-Embedded-Sample-Code
       path: modules/alexa-embedded
