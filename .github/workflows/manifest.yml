@@ -7,11 +7,17 @@ jobs:
     runs-on: ubuntu-latest
     name: Manifest
     steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+        with:
+          path: ncs/nrf
+
       - name: Manifest
         uses: carlescufi/action-manifest@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           manifest-path: 'west.yml'
+          checkout-path: 'ncs/nrf'
           label-prefix: 'manifest-'
           verbosity-level: '1'
           labels: 'manifest, west'
