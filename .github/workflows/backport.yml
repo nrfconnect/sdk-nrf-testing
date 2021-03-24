@@ -14,3 +14,4 @@ jobs:
         uses: zephyrproject-rtos/action-backport@v1.1.99-2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          issue_labels: backport
