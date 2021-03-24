@@ -11,6 +11,6 @@ jobs:
     name: Backport
     steps:
       - name: Backport
-        uses: zephyrproject-rtos/action-backport@v1.1.99
+        uses: zephyrproject-rtos/action-backport@main
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
