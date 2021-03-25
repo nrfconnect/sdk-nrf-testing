@@ -1,5 +1,6 @@
 #ifndef _NCS_VERSION_H_
 #define _NCS_VERSION_H_
+// hello
 
 #cmakedefine NCS_VERSION_CODE @NCS_VERSION_CODE@
 #define NCS_VERSION(a,b,c) (((a) << 16) + ((b) << 8) + (c))
