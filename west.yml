@@ -90,10 +90,6 @@ manifest:
     #
     # Some of these are also Zephyr modules which have NCS-specific
     # changes.
-    - name: mcuboot
-      repo-path: sdk-mcuboot
-      revision: v1.6.99-ncs1-rc2
-      path: bootloader/mcuboot
     - name: mcumgr
       repo-path: sdk-mcumgr
       revision: v0.1.0-ncs1-rc2
@@ -101,20 +97,24 @@ manifest:
     - name: nrfxlib
       repo-path: sdk-nrfxlib
       path: nrfxlib
-      revision: 50ef19254346847287fb078e7dcaa092256b478f
+      revision: pull/448/head
+    - name: sphinx-theme
+      repo-path: doc-sphinx-ncs-theme
+      path: doc-sphinx-ncs-theme
+      revision: 66a460bdb10c5b23717f4bd24e3530c9da4a0f63
+    - name: tf-m
+      repo-path: sdk-trusted-firmware-m
+      path: sdk-trusted-firmware-m
+      revision: master
     # Other third-party repositories.
-    - name: cmock
-      path: test/cmock
-      revision: c243b9a7a7b3c471023193992b46cf1bd1910450
-      remote: throwtheswitch
     - name: unity
       path: test/cmock/vendor/unity
-      revision: 031f3bbe45f8adf504ca3d13e6f093869920b091
+      revision: v2.5.2
       remote: throwtheswitch
     - name: mbedtls-nrf
       path: mbedtls
       repo-path: mbedtls
-      revision: mbedtls-2.23.0
+      revision: ac5db4da0e0f20d10218eb8054a7054efddea2c2
       remote: armmbed
     - name: nanopb
       path: modules/lib/nanopb
