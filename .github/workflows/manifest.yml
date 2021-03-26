@@ -20,7 +20,7 @@ jobs:
         run: |
                 echo "base ref: $BASE_REF"
       - name: Manifest
-        uses: carlescufi/action-manifest@main
+        uses: zephyrproject-rtos/action-manifest@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           manifest-path: 'west.yml'
