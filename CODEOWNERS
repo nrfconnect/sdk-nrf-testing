@@ -41,6 +41,7 @@ Kconfig*                                  @tejlmand
 /doc/versions.json                        @carlescufi
 /doc/_utils/                              @gmarull
 /doc/_extensions/                         @gmarull
+/doc/cache.yml                            @gmarull
 # All subfolders
 /drivers/                                 @anangl
 /dts/                                     @anangl

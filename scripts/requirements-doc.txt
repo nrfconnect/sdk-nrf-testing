@@ -3,3 +3,6 @@ CommonMark>=0.9.1
 sphinxcontrib-mscgen>=0.6
 sphinx-ncs-theme==0.6.2
 pygments>=2.7.0
+pygit2~=1.5
+pyyaml~=5.4
+azure-storage-blob~=12.8
