@@ -1,7 +1,10 @@
 pull_request_rules:
-  - name: warn on conflicts
+  - name: Tesingn adding label
     conditions:
       - author=DatGizmo
+    actions:
+      comment:
+        message: "@{{author}} added mergify-test label"
     actions:
       label:
         add:
