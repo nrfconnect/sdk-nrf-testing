@@ -15,4 +15,7 @@ pull_request_rules:
     actions:
       comment:
         message: Github actions successfull
-
+    actions:
+      label:
+        add:
+          - mergify-success
