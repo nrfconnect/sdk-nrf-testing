@@ -1,3 +1,10 @@
+queue_rules:
+  - name: urgent
+    conditions:
+      - check-success=build
+  - name: default
+    conditions:
+      - check-success=build
 pull_request_rules:
   - name: Tesing adding label
     conditions:
