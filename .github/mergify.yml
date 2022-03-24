@@ -2,6 +2,7 @@ queue_rules:
   - name: urgent
     conditions:
       - check-success=build
+      - label=urgent
   - name: default
     conditions:
       - check-success=build
@@ -17,7 +18,7 @@ pull_request_rules:
           - mergify-test
   - name: Check gh actions
     conditions:
-      - check-success=Check OSS history
+      - check-success=build
     actions:
       comment:
         message: Github actions successfull
