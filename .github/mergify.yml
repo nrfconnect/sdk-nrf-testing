@@ -9,3 +9,10 @@ pull_request_rules:
       label:
         add:
           - mergify-test
+  - name: Check gh actions
+    conditions:
+      - check-success=Check OSS history
+    actions:
+      comment:
+        message: Github actions successfull
+
