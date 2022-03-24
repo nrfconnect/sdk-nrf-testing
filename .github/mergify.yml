@@ -1,12 +1,36 @@
+queue_rules:
+  - name: urgent
+    conditions:
+      - check-success=CI/Jenkins/twister
+      - or:
+        - check-success=CI/Jenkins/integration
+        - check-success=CI/Jenkins/integration-skipped
+  - name: default
+    conditions:
+      - check-success=CI/Jenkins/twister
+      - or:
+        - check-success=CI/Jenkins/integration
+        - check-success=CI/Jenkins/integration-skipped
 pull_request_rules:
   - name: Check ci status
     conditions:
-      - and:
-        - check-success=CI/Jenkins/twister
-        - or:
-          - check-success=CI/Jenkins/integration
-          - check-success=CI/Jenkins/integration-skipped
+      - check-success=CI/Jenkins/twister
+      - or:
+        - check-success=CI/Jenkins/integration
+        - check-success=CI/Jenkins/integration-skipped
     actions:
       label:
         add:
           - ci-check-success
+  - name: merg using default queue
+    conditions:
+      - base=main
+      - label!=urgent
+      - "#approved-reviews-by>=1"
+      - check-success=CI/Jenkins/twister
+      - or:
+        - check-success=CI/Jenkins/integration
+        - check-success=CI/Jenkins/integration-skipped
+    actions:
+      queue:
+        name: default
