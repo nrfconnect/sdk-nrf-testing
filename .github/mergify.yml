@@ -1,34 +1,12 @@
-queue_rules:
-  - name: urgent
-    conditions:
-      - check-success=build
-      - label=urgent
-  - name: default
-    conditions:
-      - check-success=build
 pull_request_rules:
-  - name: Tesing adding label
+  - name: Check ci status
     conditions:
-      - author=DatGizmo
+      - and:
+        - check-success=CI/Jenkins/twister
+        - or:
+          - check-success=CI/Jenkins/integration
+          - check-neutral=CI/Jenkins/integration
     actions:
-      comment:
-        message: "@{{author}} added mergify-test label"
       label:
         add:
-          - mergify-test
-  - name: Check gh actions
-    conditions:
-      - check-success=build
-    actions:
-      comment:
-        message: Github actions successfull
-      label:
-        add:
-          - mergify-success
-  - name: merge using the merge queue
-    conditions:
-      - base=main
-      - check-success=build
-    actions:
-      queue:
-        name: default
+          - ci-check-success
