@@ -1,7 +1,5 @@
 queue_rules:
   - name: default
-    conditions:
-      - check-success=CI/Jenkins/twister
 pull_request_rules:
   - name: Check ci status
     conditions:
