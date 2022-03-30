@@ -2,6 +2,14 @@
 HashMap CI_STATE = lib_State.getConfig(JOB_NAME)
 
 pipeline {
+  parameters{
+    booleanParam(name: 'RUN_DOWNSTREAM', description: 'if false skip downstream jobs', defaultValue: true),
+    booleanParam(name: 'RUN_TESTS', description: 'if false skip testing', defaultValue: true),  // what is a purpose of RUN_TESTS?
+    booleanParam(name: 'RUN_BUILD', description: 'if false skip building', defaultValue: true),
+    string(name: 'jsonstr_CI_STATE', description: 'Default State if no upstream job', defaultValue: CI_STATE.CFG.INPUT_STATE_STR),
+    choice(name: 'TEST_CYCLE', description: 'Test Phase', choices: CI_STATE.CFG.CRON_CHOICES),
+  }    
+
   agent {
     label 'build-ncs'
   }
@@ -19,7 +27,7 @@ pipeline {
             }
             else
             {
-              lib_Status.set('SUCCESS', 'integration-skipped', CI_STATE, 'integration-skipped dummy report')
+              lib_Status.set('NEUTRAL', 'integration', CI_STATE, 'integration skipped dummy report')
             }
           }
           else {
