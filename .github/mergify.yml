@@ -30,7 +30,7 @@ pull_request_rules:
       - base=main
       - label!=urgent
       - "#approved-reviews-by>=0"
-      - title~=^[backport].*
+      - title~=^\[backport\].*
       - check-success=CI/Jenkins/twister
       - or:
         - check-success=CI/Jenkins/integration
