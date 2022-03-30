@@ -1,0 +1,32 @@
+@Library("CI_LIB") _
+HashMap CI_STATE = lib_State.getConfig(JOB_NAME)
+
+pipeline {
+  agent {
+    label 'build-ncs'
+  }
+  stages {
+    stage('Report ci status') {
+      steps {
+        script {
+          CI_STATE = lib_State.load('NRF', CI_STATE)
+          if (CI_STATE.SELF.BUILD_TYPE == "PR") {
+            lib_Status.set('SUCCESS', 'twitster', CI_STATE, 'twitster dummy report')
+            Random rnd = new Random()
+            if(0 == rnd.next(1))
+            {
+              lib_Status.set('SUCCESS', 'integration', CI_STATE, 'integration dummy report')
+            }
+            else
+            {
+              lib_Status.set('SUCCESS', 'integration-skipped', CI_STATE, 'integration-skipped dummy report')
+            }
+          }
+          else {
+            println("Not a PR nothing to do here")
+          }
+        }
+      }
+    }
+  }
+}
