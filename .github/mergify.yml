@@ -27,7 +27,7 @@ pull_request_rules:
         method: rebase
   - name: No approvals needed
     conditions:
-      - base=main
+      - base=v-1.7
       - label!=urgent
       - "#approved-reviews-by>=0"
       - title~=^\[backport\].*
