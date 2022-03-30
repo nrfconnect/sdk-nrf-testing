@@ -25,3 +25,18 @@ pull_request_rules:
       queue:
         name: default
         method: rebase
+  - name: No approvals needed
+    conditions:
+      - base=main
+      - label!=urgent
+      - "#approved-reviews-by>=0"
+      - title~=^[backport].*
+      - check-success=CI/Jenkins/twister
+      - or:
+        - check-success=CI/Jenkins/integration
+        - check-success=CI/Jenkins/integration-skipped
+    actions:
+      queue:
+        name: default
+        method: rebase
+ 
