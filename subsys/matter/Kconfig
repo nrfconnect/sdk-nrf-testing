@@ -4,6 +4,7 @@
 #
 
 # Support for Matter (formerly Connected Home over IP) protocol in NCS is experimental
+# Mergify three test commit
 config CHIP
 	bool
 	select EXPERIMENTAL
