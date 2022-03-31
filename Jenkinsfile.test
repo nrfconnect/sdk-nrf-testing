@@ -20,7 +20,7 @@ pipeline {
           CI_STATE = lib_State.load('NRF', CI_STATE)
           if (CI_STATE.SELF.BUILD_TYPE == "PR") {
             lib_Status.set('SUCCESS', 'twister', CI_STATE, 'twister dummy report')
-            def prnr = CI_STATE.SELF.CHANGE_ID
+            int prnr = CI_STATE.SELF.CHANGE_ID as int
             if(0 == prnr % 2)
             {
               lib_Status.set('SUCCESS', 'integration', CI_STATE, 'integration dummy report')
