@@ -1,5 +1,11 @@
 queue_rules:
-  - name: default
+  - name: integration
+    speculative_checks: 1
+    batch_size: 3
+    conditions: []
+  - name: twister
+    speculative_checks: 3
+    batch_size: 1
     conditions: []
 pull_request_rules:
   - name: Check ci success
@@ -19,31 +25,25 @@ pull_request_rules:
       label:
         remove:
           - ci-passed
-  - name: merg using default queue
+  - name: merg using integration queue
     conditions:
       - base=main
-      - label!=urgent
       - "#approved-reviews-by>=1"
       - check-success=CI/Jenkins/twister
-      - or:
-        - check-success=CI/Jenkins/integration
-        - check-neutral=CI/Jenkins/integration
+      - check-success=CI/Jenkins/integration
     actions:
       queue:
-        name: default
+        name: integration
         method: rebase
-  - name: No approvals needed
+        rebase_fallback: none
+  - name: merge using twister queue
     conditions:
-      - base=v-1.7
-      - label!=urgent
-      - "#approved-reviews-by>=0"
-      - title~=^\[backport\].*
+      - base=main
+      - "#approved-reviews-by>=1"
       - check-success=CI/Jenkins/twister
-      - or:
-        - check-success=CI/Jenkins/integration
-        - check-neutral=CI/Jenkins/integration
+      - check-neutral=CI/Jenkins/integration
     actions:
       queue:
-        name: default
+        name: twister
         method: rebase
-
+        rebase_fallback: none
