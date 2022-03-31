@@ -2,7 +2,7 @@ queue_rules:
   - name: default
     conditions: []
 pull_request_rules:
-  - name: Check ci status
+  - name: Check ci success
     conditions:
       - check-success=CI/Jenkins/twister
       - or:
@@ -11,7 +11,14 @@ pull_request_rules:
     actions:
       label:
         add:
-          - ci-check-success
+          - ci-passed
+  - name: Check ci missing
+    conditions:
+      - check-success!=CI/Jenkins/twister
+    actions:
+      label:
+        remove:
+          - ci-passed
   - name: merg using default queue
     conditions:
       - base=main
