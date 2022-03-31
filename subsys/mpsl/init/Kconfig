@@ -3,6 +3,7 @@
 #
 # SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
 #
+# Mergify test commit
 
 config MPSL_THREAD_COOP_PRIO
 	int
