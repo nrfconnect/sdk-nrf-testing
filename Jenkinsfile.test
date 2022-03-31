@@ -20,8 +20,8 @@ pipeline {
           CI_STATE = lib_State.load('NRF', CI_STATE)
           if (CI_STATE.SELF.BUILD_TYPE == "PR") {
             lib_Status.set('SUCCESS', 'twister', CI_STATE, 'twister dummy report')
-            Random rnd = new Random()
-            if(0 == rnd.next(1))
+            def prnr = CI_STATE.SELF.CANGE_ID
+            if(0 == prnr % 2)
             {
               lib_Status.set('SUCCESS', 'integration', CI_STATE, 'integration dummy report')
             }
