@@ -19,15 +19,15 @@ pipeline {
         script {
           CI_STATE = lib_State.load('NRF', CI_STATE)
           if (CI_STATE.SELF.BUILD_TYPE == "PR") {
-            lib_Status.set('SUCCESS', 'twister', CI_STATE, 'twister dummy report')
+            lib_Status.setCheckStatus('SUCCESS', 'twister', CI_STATE, 'twister dummy report')
             int prnr = CI_STATE.SELF.CHANGE_ID as int
             if(0 == prnr % 2)
             {
-              lib_Status.set('SUCCESS', 'integration', CI_STATE, 'integration dummy report')
+              lib_Status.setCheckStatus('SUCCESS', 'integration', CI_STATE, 'integration dummy report')
             }
             else
             {
-              lib_Status.set('NEUTRAL', 'integration', CI_STATE, 'integration skipped dummy report')
+              lib_Status.setCheckStatus('NEUTRAL', 'integration', CI_STATE, 'integration skipped dummy report')
             }
           }
           else {
