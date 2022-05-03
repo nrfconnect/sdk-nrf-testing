@@ -28,3 +28,7 @@ Official documentation at:
 * All versions: http://developer.nordicsemi.com/nRF_Connect_SDK/doc/
 
 Test commit
+.
+.
+.
+.
