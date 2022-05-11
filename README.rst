@@ -13,6 +13,7 @@ subsystems and libraries.
 
 The following repositories must be combined with sdk-nrf:
 
+
 * sdk-zephyr
 * sdk-mcuboot
 * nrfxlib
