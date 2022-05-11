@@ -1,49 +1,20 @@
-queue_rules:
-  - name: integration
-    speculative_checks: 1
-    batch_size: 3
-    conditions: []
-  - name: twister
-    speculative_checks: 3
-    batch_size: 1
-    conditions: []
 pull_request_rules:
-  - name: Check ci success
+  - name: default
     conditions:
-      - check-success=CI/Jenkins/twister
+      - base=main
+      - "#approved-reviews-by>=1"
+      - approved-reviews-by=@ncs-code-owners
       - or:
-        - check-success=CI/Jenkins/integration
-        - check-neutral=CI/Jenkins/integration
+        - label=manifest-homekit
+        - label=manifest-find-my
+        - label=CI-homekit-test
+        - label=CI-find-my-test
+      # Disable as brach protection rules will handle this. Keeping for future reference
+      #- check-success=CI/Jenkins/twister
+      #- or:
+        #- check-success=CI/Jenkins/integration
+        #- check-neutral=CI/Jenkins/integration
     actions:
-      label:
-        add:
-          - ci-passed
-  - name: Check ci missing
-    conditions:
-      - check-success!=CI/Jenkins/twister
-    actions:
-      label:
-        remove:
-          - ci-passed
-  - name: merg using integration queue
-    conditions:
-      - base=main
-      - "#approved-reviews-by>=1"
-      - check-success=CI/Jenkins/twister
-      - check-success=CI/Jenkins/integration
-    actions:
-      queue:
-        name: integration
-        method: rebase
-        rebase_fallback: none
-  - name: merge using twister queue
-    conditions:
-      - base=main
-      - "#approved-reviews-by>=1"
-      - check-success=CI/Jenkins/twister
-      - check-neutral=CI/Jenkins/integration
-    actions:
-      queue:
-        name: twister
+      merge:
         method: rebase
         rebase_fallback: none
