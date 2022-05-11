@@ -3,7 +3,6 @@ pull_request_rules:
     conditions:
       - base=main
       - "#approved-reviews-by>=1"
-      - approved-reviews-by=@ncs-code-owners
       - or:
         - label=manifest-homekit
         - label=manifest-find-my
