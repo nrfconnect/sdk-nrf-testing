@@ -1,6 +1,7 @@
 queue_rules:
   - name: default
     conditions: []
+    allow_inplace_checks: false
 pull_request_rules:
   - name: merge using default queue
     conditions:
