@@ -1,8 +1,13 @@
-pull_request_rules:
+queue_rules:
   - name: default
+    conditions: []
+    allow_inplace_checks: false
+pull_request_rules:
+  - name: merge using default queue
     conditions:
       - base=main
       - "#approved-reviews-by>=1"
+      - approved-reviews-by=@ncs-code-owners
       - or:
         - label=manifest-homekit
         - label=manifest-find-my
@@ -14,6 +19,7 @@ pull_request_rules:
         #- check-success=CI/Jenkins/integration
         #- check-neutral=CI/Jenkins/integration
     actions:
-      merge:
+      queue:
+        name: default
         method: rebase
         rebase_fallback: none
