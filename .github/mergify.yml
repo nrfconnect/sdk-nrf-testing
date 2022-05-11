@@ -21,4 +21,5 @@ pull_request_rules:
         name: default
         method: rebase
         update_method: rebase
+        update_bot_account: NordicBuilder
         rebase_fallback: none
