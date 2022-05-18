@@ -3,6 +3,7 @@
 #
 # SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
 #
+# Another test
 
 menuconfig GAZELL
 	bool "Gazell"
