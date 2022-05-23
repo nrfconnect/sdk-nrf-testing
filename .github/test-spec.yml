@@ -344,3 +344,4 @@
   - "samples/nrf9160/multicell_location/**/*"
   - "subsys/net/lib/nrf_cloud/**/*"
   - "subsys/net/lib/rest_client/**/*"
+  - "subsys/net/lib/rest_client/**/*"
