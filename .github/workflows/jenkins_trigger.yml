@@ -6,6 +6,7 @@ on:
 jobs:
   workflow_data:
     runs-on: ubuntu-latest
+    name: Check action environment
     steps:
       name: print env
         run: |
