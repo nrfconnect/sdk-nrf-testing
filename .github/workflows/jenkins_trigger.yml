@@ -1,7 +1,5 @@
 name: Jenkins Trigger
-on:
-  pull_request_target:
-    types: [opened, reopened, ready_for_review]
+on: pull_request
 
 jobs:
   workflow_data:
