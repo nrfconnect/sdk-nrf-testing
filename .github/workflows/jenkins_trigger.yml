@@ -14,7 +14,7 @@ jobs:
         uses: fountainhead/action-wait-for-check@v1.0.0
         id: wait-for-compliance
         with:
-          token: '{{ secrets.GITHUB_TOKEN }}'
+          token: '{{ secrets.NCS_GITHUB_TOKEN }}'
           checkName: Run compliance checks on patch series (PR)
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: send webhook
