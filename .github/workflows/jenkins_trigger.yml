@@ -10,3 +10,16 @@ jobs:
         run: |
           printenv
           cat $GITHUB_EVENT_PATH
+      - name: wait
+        uses: fountainhead/action-wait-for-check@v1.0.0
+        id: wait-for-compliance
+        with:
+          token: '{{ secrets.GITHUB_TOKEN }}'
+          checkName: Run compliance checks on patch series (PR)
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: send webhook
+        uses: johannes-huther/webhook.sh@v1
+        env:
+          webhook_type: 'json-extended'
+          webhook_url: '{{ secrets.JENKINS_WEBHOOK_URL }}'
+          webhook_secret: '{{ secrets.JENKINS_WEBHOOK_SECRET }}'
