@@ -9,3 +9,4 @@ jobs:
       - name: print env
         run: |
           printenv
+          cat $GITHUB_EVENT_PATH
