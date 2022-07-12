@@ -10,9 +10,13 @@ on:
 jobs:
   workflow_data:
     runs-on: ubuntu-latest
-    if: ${{ (github.event.workflow_run.conclusion == 'failure') }}
+    if: ${{ (github.event.workflow_run.conclusion == 'success') }}
     name: Send Jenkins Pull Request Webhook
     steps:
+      - name: Print env
+        run: |
+          echo $GITHUB_EVENT_PATH
+          cat $GITHUB_EVENT_PATH
       - name: Send Jenkins webhook
         uses: johannes-huther/webhook.sh@v1
         env:
