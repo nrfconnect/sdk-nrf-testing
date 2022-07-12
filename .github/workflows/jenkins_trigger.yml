@@ -2,14 +2,15 @@ name: Jenkins Job Trigger
 
 on:
   workflow_run:
-    workflows: ["Compliance"]
+    workflows:
+      - "Compliance"
     types:
       - completed
 
 jobs:
   workflow_data:
     runs-on: ubuntu-latest
-    if: ${{ (github.event.workflow_run.conclusion == 'success') }}
+    if: ${{ (github.event.workflow_run.conclusion == 'failure') }}
     name: Send Jenkins Pull Request Webhook
     steps:
       - name: Send Jenkins webhook
