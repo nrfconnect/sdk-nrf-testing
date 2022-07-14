@@ -7,6 +7,23 @@ jobs:
     runs-on: ubuntu-latest
     name: Run compliance checks on patch series (PR)
     steps:
+    - name: Print env
+      run: |
+        echo $GITHUB_EVENT_PATH
+        echo $GITHUB_EVENT_NAME
+        echo $GITHUB_REPOSITORY
+        echo $GITHUB_SHA
+        echo $GITHUB_REF
+        echo $GITHUB_HEAD_REF
+        echo $GITHUB_WORKFLOW
+        cat $GITHUB_EVENT_PATH
+
+    - name: store-webhook-info
+      uses: actions/upload-artifact@v2
+      with:
+        name: webhook_payload
+        path: ${{ github.event_path }}
+
     - name: Checkout the code
       uses: actions/checkout@v2
       with:
