@@ -39,7 +39,6 @@ jobs:
 
       - name: Send Jenkins webhook
         uses: johannes-huther/webhook.sh@v1
-        run: echo "pull_request" >> $GITHUB_EVENT_NAME
         env:
           webhook_type: 'json-extended'
           webhook_url: ${{ secrets.JENKINS_WEBHOOK_URL }}
