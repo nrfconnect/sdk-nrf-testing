@@ -24,10 +24,10 @@ jobs:
           workflow: compliance.yml
           run_id: ${{ github.event.workflow_run.id }}
           name: webhook_payload
-          path: ${{ github.event_path }}
 
       - name: Print env 2
         run: |
+          cp ./event.json $GITHUB_EVENT_PATH
           echo $GITHUB_EVENT_PATH
           cat $GITHUB_EVENT_PATH
 
