@@ -1,0 +1,38 @@
+name: Jenkins Job Trigger
+
+on:
+  workflow_run:
+    workflows: ["Compliance"]
+    types:
+      - completed
+
+jobs:
+  workflow_data:
+    runs-on: ubuntu-latest
+    name: Send Jenkins Pull Request Webhook
+    if: ${{ (github.event.workflow_run.conclusion == 'success') }}
+    steps:
+
+      - name: Print env
+        run: |
+          echo $GITHUB_EVENT_PATH
+          cat $GITHUB_EVENT_PATH
+
+      - name: Download webhook info
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: compliance.yml
+          run_id: ${{ github.event.workflow_run.id }}
+          name: webhook_payload
+
+      - name: Print env 2
+        run: |
+          echo $GITHUB_EVENT_PATH
+          cat $GITHUB_EVENT_PATH
+
+      - name: Send Jenkins webhook
+        uses: johannes-huther/webhook.sh@v1
+        env:
+          webhook_type: 'json-extended'
+          webhook_url: ${{ secrets.JENKINS_WEBHOOK_URL }}
+          webhook_secret: ${{ secrets.JENKINS_WEBHOOK_SECRET }}
