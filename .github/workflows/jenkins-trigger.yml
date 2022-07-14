@@ -37,15 +37,11 @@ jobs:
           echo $GITHUB_EVENT_PATH
           echo $GITHUB_EVENT_NAME
 
-      - name: Print env 3
-        env:
-          GITHUB_EVENT_NAME: pull_request
-        run: |
-          echo $GITHUB_EVENT_NAME
-
       - name: Send Jenkins webhook
         uses: johannes-huther/webhook.sh@v1
+        run: echo "pull_request" >> $GITHUB_EVENT_NAME
         env:
           webhook_type: 'json-extended'
           webhook_url: ${{ secrets.JENKINS_WEBHOOK_URL }}
           webhook_secret: ${{ secrets.JENKINS_WEBHOOK_SECRET }}
+          verbose: true
