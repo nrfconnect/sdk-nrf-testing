@@ -16,7 +16,6 @@ jobs:
         echo $GITHUB_REF
         echo $GITHUB_HEAD_REF
         echo $GITHUB_WORKFLOW
-        cat $GITHUB_EVENT_PATH
 
     - name: store-webhook-info
       uses: actions/upload-artifact@v2

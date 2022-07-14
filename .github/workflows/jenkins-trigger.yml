@@ -22,7 +22,6 @@ jobs:
           echo $GITHUB_REF
           echo $GITHUB_HEAD_REF
           echo $GITHUB_WORKFLOW
-          cat $GITHUB_EVENT_PATH
 
       - name: Download webhook info
         uses: dawidd6/action-download-artifact@v2
@@ -36,7 +35,11 @@ jobs:
           cp ./event.json $GITHUB_EVENT_PATH
           export GITHUB_EVENT_NAME='pull_request'
           echo $GITHUB_EVENT_PATH
-          cat $GITHUB_EVENT_PATH
+          echo $GITHUB_EVENT_NAME
+
+      - name: Print env 3
+        run: |
+          echo $GITHUB_EVENT_NAME
 
       - name: Send Jenkins webhook
         uses: johannes-huther/webhook.sh@v1
