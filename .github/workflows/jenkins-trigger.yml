@@ -43,4 +43,4 @@ jobs:
           webhook_type: 'json-extended'
           webhook_url: ${{ secrets.JENKINS_WEBHOOK_URL }}
           webhook_secret: ${{ secrets.JENKINS_WEBHOOK_SECRET }}
-          verbose: true
+          data: '{ "event": "pull_request" }'
