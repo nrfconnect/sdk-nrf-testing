@@ -343,9 +343,9 @@ int read_life_cycle_state(enum lcs *lcs)
 		return -EINVAL;
 	}
 
-	uint16_t provisioning = read_halfword(&p_bl_storage_data->lcs.provisioning);
-	uint16_t secure = read_halfword(&p_bl_storage_data->lcs.secure);
-	uint16_t decommissioned = read_halfword(&p_bl_storage_data->lcs.decommissioned);
+	uint16_t provisioning = nrfx_nvmc_otp_halfword_read((uint32_t) &p_bl_storage_data->lcs.provisioning);
+	uint16_t secure = nrfx_nvmc_otp_halfword_read((uint32_t) &p_bl_storage_data->lcs.secure);
+	uint16_t decommissioned = nrfx_nvmc_otp_halfword_read((uint32_t) &p_bl_storage_data->lcs.decommissioned);
 
 	if (provisioning == STATE_NOT_ENTERED
 		&& secure == STATE_NOT_ENTERED

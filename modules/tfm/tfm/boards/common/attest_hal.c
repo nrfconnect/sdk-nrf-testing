@@ -63,26 +63,6 @@ static const struct bl_storage_data *p_bl_storage_data =
 #define	EINVAL 22	/* Invalid argument */
 
 
-/** Function for reading a half-word (2 byte value) from OTP.
- *
- * \details The flash in OTP supports only aligned 4 byte read operations.
- *          This function reads the encompassing 4 byte word, and returns the
- *          requested half-word.
- *
- * \param[in]  ptr  Address to read.
- *
- * \return value
- */
-static uint16_t read_halfword(const uint16_t *ptr)
-{
-	bool top_half = ((uint32_t)ptr % 4); /* Addr not div by 4 */
-	uintptr_t target_addr = (uintptr_t)ptr & ~3; /* Floor address */
-	uint32_t val32 = *(uint32_t *)target_addr;
-	__DSB(); /* Because of nRF9160 Erratum 7 */
-
-	return (top_half ? (val32 >> 16) : val32) & 0x0000FFFF;
-}
-
 /** Function for writing a half-word (2 byte value) to OTP.
  *
  * \details The flash in OTP supports only aligned 4 byte write operations.
@@ -111,9 +91,9 @@ int read_lcs_from_otp(enum lcs *lcs)
 		return -EINVAL;
 	}
 
-	uint16_t provisioning = read_halfword(&p_bl_storage_data->lcs.provisioning);
-	uint16_t secure = read_halfword(&p_bl_storage_data->lcs.secure);
-	uint16_t decommissioned = read_halfword(&p_bl_storage_data->lcs.decommissioned);
+	uint16_t provisioning = nrfx_nvmc_otp_halfword_read((uint32_t) &p_bl_storage_data->lcs.provisioning);
+	uint16_t secure = nrfx_nvmc_otp_halfword_read((uint32_t) &p_bl_storage_data->lcs.secure);
+	uint16_t decommissioned = nrfx_nvmc_otp_halfword_read((uint32_t) &p_bl_storage_data->lcs.decommissioned);
 
 	if (provisioning == STATE_NOT_ENTERED
 		&& secure == STATE_NOT_ENTERED
