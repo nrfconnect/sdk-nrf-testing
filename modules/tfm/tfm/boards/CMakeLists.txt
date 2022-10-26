@@ -49,10 +49,11 @@ target_link_libraries(platform_s
  )
 
 if (NOT ${PLATFORM_DEFAULT_PROVISIONING})
-  if(NRF_SKIP_PROVISIONING)
-	set(provisioning_source dummy_provisioning.c)
+  if(NRF_PROVISIONING)
+    target_compile_definitions(platform_s PUBLIC NRF_PROVISIONING)
+    set(provisioning_source nrf_provisioning.c)
   else()
-	set(provisioning_source nrf_provisioning.c)
+    set(provisioning_source dummy_provisioning.c)
   endif()
 
   target_sources(platform_s

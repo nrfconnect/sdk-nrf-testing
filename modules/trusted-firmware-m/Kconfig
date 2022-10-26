@@ -262,6 +262,8 @@ config TFM_STORAGE
 
 config TFM_NRF_PROVISIONING
 	bool "Provision the device"
+	depends on !TFM_PROFILE_TYPE_MINIMAL
+	default y
 	help
 	  This configuration will enable provioning of the TF-M
 	  image for Nordic devices. When this is required TF-M
