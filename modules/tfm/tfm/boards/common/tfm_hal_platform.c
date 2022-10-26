@@ -10,9 +10,9 @@
 #include <nrf_cc3xx_platform_ctr_drbg.h>
 #endif
 
-#if !defined(PLATFORM_DEFAULT_PROVISIONING) && !defined(TFM_DUMMY_PROVISIONING)
+#if !defined(NRF_SKIP_PROVISIONING)
 #include "tfm_attest_hal.h"
-#endif /* !defined(PLATFORM_DEFAULT_PROVISIONING) && !defined(TFM_DUMMY_PROVISIONING) */
+#endif /* !defined(NRF_SKIP_PROVISIONING) */
 
 #include "tfm_hal_platform.h"
 #include "tfm_hal_platform_common.h"
@@ -102,12 +102,12 @@ enum tfm_hal_status_t tfm_hal_platform_init(void)
  * secured, we don't support any other lifecycle state. This ensures that TF-M will not
  * continue booting when a non supported state is present.
  */
-#if !defined(PLATFORM_DEFAULT_PROVISIONING) && !defined(TFM_DUMMY_PROVISIONING)
+#if !defined(NRF_SKIP_PROVISIONING)
 	enum tfm_security_lifecycle_t lcs = tfm_attest_hal_get_security_lifecycle();
 	if(lcs != TFM_SLC_PSA_ROT_PROVISIONING && lcs != TFM_SLC_SECURED) {
 		return TFM_HAL_ERROR_BAD_STATE;
 	}
-#endif /* !defined(PLATFORM_DEFAULT_PROVISIONING) && !defined(TFM_DUMMY_PROVISIONING) */
+#endif /* !defined(NRF_SKIP_PROVISIONING) */
 
 	return TFM_HAL_SUCCESS;
 }
