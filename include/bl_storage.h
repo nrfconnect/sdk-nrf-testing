@@ -10,6 +10,8 @@
 #include <string.h>
 #include <zephyr/types.h>
 #include <drivers/nrfx_common.h>
+#include <nrfx_nvmc.h>
+#include <errno.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -21,6 +23,19 @@ extern "C" {
 
 /* We truncate the 32 byte sha256 down to 16 bytes before storing it */
 #define SB_PUBLIC_KEY_HASH_LEN 16
+
+/**
+ * @brief The PSA life cycle states a device can be in.
+ *
+ * The LCS can be only transitioned in the order they are defined here.
+ */
+enum lcs {
+	UNKNOWN = 0,
+	ASSEMBLY = 1,
+	PROVISION = 2,
+	SECURE = 3,
+	DECOMMISSIONED = 4,
+};
 
 /** Storage for the PRoT Security Lifecycle state, that consists of 4 states:
  *  - Device assembly and test
@@ -35,11 +50,11 @@ extern "C" {
 struct life_cycle_state_data {
 	uint16_t provisioning;
 	uint16_t secure;
+	uint16_t decommissioned;
 	/* Pad to end the alignment at a 4-byte boundary as the UICR->OTP
 	 * only supports 4-byte reads
 	 */
 	uint16_t reserved_for_padding;
-	uint16_t decommissioned;
 };
 
 /** The first data structure in the bootloader storage. It has unknown length
@@ -48,7 +63,7 @@ struct life_cycle_state_data {
  */
 struct bl_storage_data {
 	/* NB: When placed in OTP, reads must be 4 bytes and 4 byte aligned */
-	struct life_cycle_state_data lcs;
+	uint16_t lcs[4];
 	uint32_t s0_address;
 	uint32_t s1_address;
 	uint32_t num_public_keys; /* Number of entries in 'key_data' list. */
@@ -60,6 +75,8 @@ struct bl_storage_data {
 		uint8_t hash[SB_PUBLIC_KEY_HASH_LEN];
 	} key_data[1];
 };
+
+#define BL_STORAGE ((struct bl_storage_data *)(PM_PROVISION_ADDRESS))
 
 /** @defgroup bl_storage Bootloader storage (protected data).
  * @{
@@ -150,44 +167,6 @@ uint16_t get_monotonic_counter(void);
 int set_monotonic_counter(uint16_t new_counter);
 
 /**
- * @brief The PSA life cycle states a device can be in.
- *
- * The LCS can be only transitioned in the order they are defined here.
- */
-enum lcs {
-	UNKNOWN = 0,
-	ASSEMBLY = 1,
-	PROVISION = 2,
-	SECURE = 3,
-	DECOMMISSIONED = 4,
-};
-
-/**
- * @brief Update the life cycle state in OTP,
- *
- * If the given next state is not a not allowed transition the function
- * will return -EINVALIDLCS
- *
- * @param[in] next_lcs Must be the same or the successor state of the current
- *                     one.
- *
- * @retval 0            The LSC was update successfully
- * @retval -EREADLCS    Error on reading the current state
- * @retval -EINVALIDLCS Invalid next state
- */
-int update_life_cycle_state(enum lcs next_lcs);
-
-/**
- * @brief Read the current life cycle state the device is in from OTP,
- *
- * @param[out] lcs Will be set to the current LCS the device is in
- *
- * @retval 0            The LSC read was successful
- * @retval -EREADLCS    Error on reading from OTP or invalid OTP content
- */
-int read_life_cycle_state(enum lcs *lcs);
-
-/**
  * Copies @p src into @p dst. Reads from @p src are done 32 bits at a
  * time. Writes to @p dst are done a byte at a time.
  *
@@ -209,6 +188,122 @@ NRFX_STATIC_INLINE void otp_copy32(uint8_t *restrict dst, uint32_t volatile *res
 			dst[i * 4 + j] = (val >> 8 * j) & 0xFF;
 		}
 	}
+}
+
+/* OTP is 0xFFFF after erase so setting all bits to 0 so a full erase is needed
+ * to reset
+ */
+#define STATE_ENTERED 0x0000
+#define STATE_NOT_ENTERED 0xFFFF
+
+/* The below bl_storage functions are static inline in the header file
+   so that TF-M (that does not include bl_storage.c) can also have
+   access to them.
+   This is a temporary solution until TF-M has access to NSIB functions.
+*/
+
+NRFX_STATIC_INLINE bool life_cycle_state_is_valid(void) {
+	uint16_t lcs_copy[4];
+	uint32_t num_words = 2;
+
+	otp_copy32((uint8_t *)lcs_copy, (uint32_t *)BL_STORAGE->lcs, num_words);
+
+	for(int i = 2; i >= 0; i--) {
+		switch(lcs_copy[i]) {
+		case STATE_ENTERED:
+			for(int j = 0; j < i; j++) {
+				if(lcs_copy[j] != STATE_ENTERED) {
+					// A state has been skipped
+					return false;
+				}
+			}
+			break;
+		case STATE_NOT_ENTERED:
+			break;
+		default:
+			// A state has neither of the valid encodings
+			return false;
+		}
+	}
+
+	return true;
+}
+
+/**
+ * @brief Read the current life cycle state the device is in from OTP,
+ *
+ * @param[out] lcs Will be set to the current LCS the device is in
+ *
+ * @retval 0            The LSC read was successful
+ * @retval -EREADLCS    Error on reading from OTP or invalid OTP content
+ */
+NRFX_STATIC_INLINE int read_life_cycle_state(enum lcs *lcs)
+{
+	if (lcs == NULL) {
+		return -EINVAL;
+	}
+
+	if(!life_cycle_state_is_valid()) {
+		return -EREADLCS;
+	}
+
+	uint16_t lcs_copy[4];
+	uint32_t num_words = 2;
+
+	otp_copy32((uint8_t *)lcs_copy, (uint32_t *)BL_STORAGE->lcs, num_words);
+
+	for(int i = 2; i >= 0; i--) {
+		if(lcs_copy[i] == STATE_ENTERED) {
+			*lcs = (enum lcs)(i + 2);
+			return 0;
+		}
+	}
+
+	return -EREADLCS;
+}
+
+/**
+ * @brief Update the life cycle state in OTP,
+ *
+ * If the given next state is not a not allowed transition the function
+ * will return -EINVALIDLCS
+ *
+ * @param[in] next_lcs Must be the same or the successor state of the current
+ *                     one.
+ *
+ * @retval 0            The LSC was update successfully
+ * @retval -EREADLCS    Error on reading the current state
+ * @retval -EINVALIDLCS Invalid next state
+ */
+NRFX_STATIC_INLINE int update_life_cycle_state(enum lcs next_lcs)
+{
+	int err;
+	enum lcs current_lcs = 0;
+
+	/* As the device starts in ASSEMBLY, it is not possible to update to it. */
+	if(next_lcs <= ASSEMBLY) {
+		return -EINVALIDLCS;
+	}
+
+	err = read_life_cycle_state(&current_lcs);
+	if (err) {
+		return err;
+	}
+
+	if (next_lcs == current_lcs) {
+		/* The same LCS is a valid argument, but nothing to do so return success */
+		return 0;
+	}
+
+	/* The state to be updated to must be the next in line */
+	if (next_lcs == current_lcs + 1) {
+		uint16_t * addr = &(BL_STORAGE->lcs[next_lcs - PROVISION]);
+		nrfx_nvmc_halfword_write((uint32_t)(addr), STATE_ENTERED);
+		return 0;
+	}
+
+	/* Invalid transition */
+	return -EINVALIDLCS;
 }
 
   /** @} */
