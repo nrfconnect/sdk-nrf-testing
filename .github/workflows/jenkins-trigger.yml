@@ -1,46 +1,31 @@
 name: Jenkins Job Trigger
-
-on:
-  workflow_run:
-    workflows: ["Compliance"]
-    types:
-      - completed
+on: pull_request_target
 
 jobs:
   workflow_data:
     runs-on: ubuntu-latest
     name: Send Jenkins Pull Request Webhook
-    if: ${{ (github.event.workflow_run.conclusion == 'success') }}
     steps:
-
-      - name: Print env
-        run: |
-          echo $GITHUB_EVENT_PATH
-          echo $GITHUB_EVENT_NAME
-          echo $GITHUB_REPOSITORY
-          echo $GITHUB_SHA
-          echo $GITHUB_REF
-          echo $GITHUB_HEAD_REF
-          echo $GITHUB_WORKFLOW
-
-      - name: Download webhook info
-        uses: dawidd6/action-download-artifact@v2
+      - name: Wait for compliance
+        uses: fountainhead/action-wait-for-check@v1.0.0
+        id: wait-for-compliance
         with:
-          workflow: compliance.yml
-          run_id: ${{ github.event.workflow_run.id }}
-          name: webhook_payload
-
-      - name: Print env 2
-        run: |
-          cp ./event.json $GITHUB_EVENT_PATH
-          export GITHUB_EVENT_NAME='pull_request'
-          echo $GITHUB_EVENT_PATH
-          echo $GITHUB_EVENT_NAME
-
+          token: ${{ secrets.NCS_GITHUB_TOKEN }}
+          # Only the second part of the check name is needed (everything after the '/')
+          checkName: "Run compliance checks on patch series (PR)"
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Wait for oss history
+        uses: fountainhead/action-wait-for-check@v1.0.0
+        id: wait-for-oss
+        with:
+          token: ${{ secrets.NCS_GITHUB_TOKEN }}
+          # Only the second part of the check name is needed (everything after the '/')
+          checkName: "Check OSS history"
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: Send Jenkins webhook
+        if: ${{ (steps.wait-for-compliance.outputs.conclusion == 'success') && (steps.wait-for-oss.outputs.conclusion == 'success') }}
         uses: johannes-huther/webhook.sh@v1
         env:
           webhook_type: 'json-extended'
           webhook_url: ${{ secrets.JENKINS_WEBHOOK_URL }}
           webhook_secret: ${{ secrets.JENKINS_WEBHOOK_SECRET }}
-          data: '{ "event": "pull_request2" }'
