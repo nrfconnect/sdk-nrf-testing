@@ -27,11 +27,11 @@ jobs:
           sudo apt install -y sshpass
           pip3 install -r scripts/requirements-doc.txt
 
-      - name: Upload cache files
-        env:
-          NCS_CACHE_AZ_KEY: ${{ secrets.NCS_CACHE_AZ_KEY }}
-        run: |
-            python3 doc/_scripts/cache_upload.py -i cache
+      # - name: Upload cache files
+      #   env:
+      #     NCS_CACHE_AZ_KEY: ${{ secrets.NCS_CACHE_AZ_KEY }}
+      #   run: |
+      #       python3 doc/_scripts/cache_upload.py -i cache
 
       - name: Prepare documentation upload
         working-directory: cache
@@ -56,25 +56,25 @@ jobs:
           mv ../extra/monitor.txt monitor_${GITHUB_RUN_ID}.txt
           sed -i "s/__FILE__/doc_build_${GITHUB_RUN_ID}.tgz/g" monitor_${GITHUB_RUN_ID}.txt
 
-      - name: Upload documentation
-        env:
-          SSHUSER: ${{ secrets.NCS_TRANSFER_DOC_USR }}
-          SSHPASS: ${{ secrets.NCS_TRANSFER_DOC_PWD }}
-        working-directory: cache/upload
-        run: |
-          # trust server
-          mkdir -p ~/.ssh && \
-            ssh-keyscan -p 2222 transfer.nordicsemi.no >> ~/.ssh/known_hosts
-          # upload files
-          for file in *; do
-            echo "put ${file}" | \
-              sshpass -e sftp -P 2222 -o BatchMode=no -b - $SSHUSER@transfer.nordicsemi.no
-          done
+      # - name: Upload documentation
+      #   env:
+      #     SSHUSER: ${{ secrets.NCS_TRANSFER_DOC_USR }}
+      #     SSHPASS: ${{ secrets.NCS_TRANSFER_DOC_PWD }}
+      #   working-directory: cache/upload
+      #   run: |
+      #     # trust server
+      #     mkdir -p ~/.ssh && \
+      #       ssh-keyscan -p 2222 transfer.nordicsemi.no >> ~/.ssh/known_hosts
+      #     # upload files
+      #     for file in *; do
+      #       echo "put ${file}" | \
+      #         sshpass -e sftp -P 2222 -o BatchMode=no -b - $SSHUSER@transfer.nordicsemi.no
+      #     done
 
-      - name: Add preview URL comment for PRs
-        uses: carlescufi/action-doc-url@main
-        with:
-          github-token: ${{ secrets.NCS_GITHUB_TOKEN }}
-          urlroot: ${{ secrets.NCS_DOC_URL_ROOT }}
-          pr-prefix: "PR-"
-          pr-file: cache/extra/pr.txt
+      # - name: Add preview URL comment for PRs
+      #   uses: carlescufi/action-doc-url@main
+      #   with:
+      #     github-token: ${{ secrets.NCS_GITHUB_TOKEN }}
+      #     urlroot: ${{ secrets.NCS_DOC_URL_ROOT }}
+      #     pr-prefix: "PR-"
+      #     pr-file: cache/extra/pr.txt
