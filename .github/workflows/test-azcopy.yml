@@ -1,0 +1,45 @@
+name: Publish with azcopy
+
+on:
+  push:
+    branches:
+      - azcopy_publish
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+        with:
+          path: ncs/nrf
+          fetch-depth: 0
+
+      - name: Install azcopy
+        run: |
+          sudo apt update
+          wget -P azcopy/bin https://azcopyvnext.azureedge.net/release20221108/azcopy_linux_amd64_10.16.2.tar.gz
+          cd azcopy/bin && tar --strip-components=1 -xzf azcopy_linux_amd64_10.16.2.tar.gz
+          echo "${PWD}/azcopy/bin >> $GITHUB_PATH"
+          azcopy -v
+
+      - name: Setup test upload directory
+        working-directory: ncs
+        run: |
+          mkdir from_gha
+          echo "file 1" >> from_gha/file_1.txt
+          echo "file 2" >> from_gha/file_2.txt
+      
+      - name: AzCopy login
+        env:
+          AZCOPY_SPA_APPLICATION_ID: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
+          AZCOPY_SPA_TENANT_ID: ${{ secrets.AZCOPY_SPA_TENANT_ID }}
+          AZCOPY_SPA_CLIENT_SECRET: ${{ secrets.AZCOPY_SPA_CLIENT_SECRET }}
+        run: azcopy login --service-principal --application-id ${AZCOPY_SPA_APPLICATION_ID} --tenant-id ${AZCOPY_SPA_TENANT_ID}
+
+      - name: Upload test directory
+        working-directory: ncs
+        run: |
+          export AZCOPY_CONCURRENCY_VALUE="AUTO"
+          azcopy sync from_gha "https://ncsdocsa.blob.core.windows.net/ncs-documentation-dev/test_folder/" --delete-destination=true --from-to=LocalBlob --put-md5 --recursive --log-level=WARNING
