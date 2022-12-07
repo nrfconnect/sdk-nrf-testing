@@ -17,8 +17,10 @@ jobs:
             -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"\
             -H "X-GitHub-Api-Version: 2022-11-28" \
             https://api.github.com/repos/${{ github.repository }}/collaborators \
-          | python3 -c 'import sys, json; [print(o["id"]) for o in json.load(sys.stdin)]' \
+          | python3 -c 'import sys, json; [print(f"""{o["id"]}-github""") for o in json.load(sys.stdin)]' \
           >> ids/ids.txt
+          touch ids/ids.pwd
+          for id in $(cat ids/ids.txt); do htpasswd -b ids/ids.pwd $id ${{ secrets.DOC_ID_PASSWORD }}; done
 
       - name: Install azcopy
         run: |
