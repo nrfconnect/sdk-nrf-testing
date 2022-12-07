@@ -1,0 +1,41 @@
+name: List GitHub accounts
+
+on:
+  push:
+    branches:
+      - list_accounts
+
+jobs:
+  list-accounts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create list
+        run: |
+          mkdir ids
+          curl -s \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"\
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/${{ github.repository }}/collaborators \
+          | python3 -c 'import sys, json; [print(o["id"]) for o in json.load(sys.stdin)]' \
+          >> ids/ids.txt
+
+      - name: Install azcopy
+        run: |
+          sudo apt update
+          wget -P azcopy/bin https://azcopyvnext.azureedge.net/release20221108/azcopy_linux_amd64_10.16.2.tar.gz
+          cd azcopy/bin && tar --strip-components=1 -xzf azcopy_linux_amd64_10.16.2.tar.gz
+          echo "${PWD}/azcopy/bin >> $GITHUB_PATH"
+          azcopy -v
+      
+      # - name: AzCopy login
+      #   env:
+      #     AZCOPY_SPA_APPLICATION_ID: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
+      #     AZCOPY_SPA_TENANT_ID: ${{ secrets.AZCOPY_SPA_TENANT_ID }}
+      #     AZCOPY_SPA_CLIENT_SECRET: ${{ secrets.AZCOPY_SPA_CLIENT_SECRET }}
+      #   run: azcopy login --service-principal --application-id ${AZCOPY_SPA_APPLICATION_ID} --tenant-id ${AZCOPY_SPA_TENANT_ID}
+
+      - name: Upload test file
+        run: |
+          export AZCOPY_CONCURRENCY_VALUE="AUTO"
+          azcopy sync ids "https://ncsdocsa.blob.core.windows.net/ncs-documentation-dev/ids/?${{ secrets.AZ_SAS_TOKEN }}" --delete-destination=true --from-to=LocalBlob --put-md5 --recursive --log-level=WARNING
