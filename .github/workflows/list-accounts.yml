@@ -5,6 +5,10 @@ on:
     branches:
       - list_accounts
 
+# on:
+#   schedule:
+#     - cron: '40 4 * * *'
+
 jobs:
   list-accounts:
     runs-on: ubuntu-latest
