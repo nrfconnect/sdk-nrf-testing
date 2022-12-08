@@ -1,17 +1,22 @@
 name: Documentation Build
 
+# on:
+#   pull_request:
+#     types: [opened, synchronize, reopened]
+#     branches:
+#       - main
+#       - 'v*-branch'
+#   push:
+#     branches:
+#       - main
+#       - 'v*-branch'
+#     tags:
+#       - v*
+
 on:
-  pull_request:
-    types: [opened, synchronize, reopened]
-    branches:
-      - main
-      - 'v*-branch'
   push:
     branches:
-      - main
-      - 'v*-branch'
-    tags:
-      - v*
+      - azcopy_publish
 
 jobs:
   build:
@@ -64,13 +69,13 @@ jobs:
           ninja -C doc/_build
 
       - name: Build cache
-        if: ${{ !contains(github.event.pull_request.labels.*.name, 'external') }}
+        # if: ${{ !contains(github.event.pull_request.labels.*.name, 'external') }}
         working-directory: ncs/nrf
         run: |
             python3 doc/_scripts/cache_create.py -b doc/_build -o cache
 
       - name: Prepare extra cache files
-        if: ${{ !contains(github.event.pull_request.labels.*.name, 'external') }}
+        # if: ${{ !contains(github.event.pull_request.labels.*.name, 'external') }}
         working-directory: ncs/nrf/cache
         run: |
           mkdir extra && cd extra
@@ -80,9 +85,9 @@ jobs:
           cp ../../doc/_build/html/versions.json .
 
           # Create documentation upload files
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            echo "publish2 dev PR-${{ github.event.number }} __FILE__" > monitor.txt
-            echo "${{ github.event.number }}" > pr.txt
+          if true; then
+            echo "publish2 dev PR-0-test __FILE__" > monitor.txt
+            echo "0-test" > pr.txt
           else
             VERSION_REGEX="^v([0-9a-z\.\-]+)$"
             if [[ ${GITHUB_REF#refs/tags/} =~ $VERSION_REGEX ]]; then
@@ -97,8 +102,118 @@ jobs:
           fi
 
       - name: Archive cache
-        if: ${{ !contains(github.event.pull_request.labels.*.name, 'external') }}
+        # if: ${{ !contains(github.event.pull_request.labels.*.name, 'external') }}
         uses: actions/upload-artifact@v2
         with:
           name: cache
           path: ncs/nrf/cache
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    # if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+      
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with: 
+          name: cache
+          path: cache
+
+      - name: Install dependencies
+        run: |
+          sudo apt install -y sshpass
+          pip3 install -r scripts/requirements-doc.txt
+
+      # - name: Upload cache files
+      #   env:
+      #     NCS_CACHE_AZ_KEY: ${{ secrets.NCS_CACHE_AZ_KEY }}
+      #   run: |
+      #       python3 doc/_scripts/cache_upload.py -i cache
+
+      - name: Install azcopy
+        run: |
+          sudo apt update
+          wget -P azcopy/bin https://azcopyvnext.azureedge.net/release20221108/azcopy_linux_amd64_10.16.2.tar.gz
+          cd azcopy/bin && tar --strip-components=1 -xzf azcopy_linux_amd64_10.16.2.tar.gz
+          echo "${PWD}/azcopy/bin >> $GITHUB_PATH"
+          azcopy -v
+      
+      - name: AzCopy login
+        env:
+          AZCOPY_SPA_APPLICATION_ID: ${{ secrets.AZCOPY_SPA_APPLICATION_ID }}
+          AZCOPY_SPA_TENANT_ID: ${{ secrets.AZCOPY_SPA_TENANT_ID }}
+          AZCOPY_SPA_CLIENT_SECRET: ${{ secrets.AZCOPY_SPA_CLIENT_SECRET }}
+        run: azcopy login --service-principal --application-id ${AZCOPY_SPA_APPLICATION_ID} --tenant-id ${AZCOPY_SPA_TENANT_ID}
+
+      - name: Upload documentation
+        working-directory: cache
+        env:
+          private_repos: "matter mcuboot"
+        run: |
+          # don't do anything if monitor.txt doesn't exist (no publish)
+          if [[ ! -f "extra/monitor.txt" ]]; then
+            exit 0
+          fi
+
+          # decompress cache files
+          for f in *.zip; do
+            unzip -q "$f"
+          done
+
+          # prepare upload
+          mv extra/index.html html
+          mv extra/versions.json html
+
+          for repo in $private_repos; do
+            if [[ -d html/$repo ]]; then
+              azcopy copy "https://ncsdocsa.blob.core.windows.net/ncs-doc-authorization/${repo}_htaccess.txt" html/$repo/.htaccess
+              sed -i "s/__PASSWORD__/${{ secrets.DOC_ID_PASSWORD }}/g" html/$repo/.htaccess
+            fi
+          done
+
+          read -a strarr <<< $(cat extra/monitor.txt)
+          category=${strarr[1]}
+          name=${strarr[2]}
+
+          if [[ "$category" == "dev" ]]; then
+            destination="ncs-documentation-dev"
+          elif [[ "$category" == "main" ]]; then
+            destination="ncs-documentation-prod"
+          else
+            echo "No target set for publish category '$category'"
+            exit 1
+          fi
+
+          mkdir -p $GITHUB_WORKSPACE/azcopy_logs
+          export AZCOPY_LOG_LOCATION="${GITHUB_WORKSPACE}/azcopy_logs/docsync.log"
+          azcopy sync html "https://ncsdocsa.blob.core.windows.net/$destination/$name/" --delete-destination=true --from-to=LocalBlob --put-md5 --recursive --log-level=WARNING
+          
+          if [[ -f "$GITHUB_WORKSPACE/azcopy_logs/docsync.log" ]]; then
+            cat $GITHUB_WORKSPACE/azcopy_logs/docsync.log
+          fi
+
+      # - name: Upload documentation
+      #   env:
+      #     SSHUSER: ${{ secrets.NCS_TRANSFER_DOC_USR }}
+      #     SSHPASS: ${{ secrets.NCS_TRANSFER_DOC_PWD }}
+      #   working-directory: cache/upload
+      #   run: |
+      #     # trust server
+      #     mkdir -p ~/.ssh && \
+      #       ssh-keyscan -p 2222 transfer.nordicsemi.no >> ~/.ssh/known_hosts
+      #     # upload files
+      #     for file in *; do
+      #       echo "put ${file}" | \
+      #         sshpass -e sftp -P 2222 -o BatchMode=no -b - $SSHUSER@transfer.nordicsemi.no
+      #     done
+
+      # - name: Add preview URL comment for PRs
+      #   uses: carlescufi/action-doc-url@main
+      #   with:
+      #     github-token: ${{ secrets.NCS_GITHUB_TOKEN }}
+      #     urlroot: ${{ secrets.NCS_DOC_URL_ROOT }}
+      #     pr-prefix: "PR-"
+      #     pr-file: cache/extra/pr.txt
