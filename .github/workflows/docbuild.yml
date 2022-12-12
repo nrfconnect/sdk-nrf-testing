@@ -86,8 +86,8 @@ jobs:
 
           # Create documentation upload files
           if true; then
-            echo "publish2 dev PR-0-test __FILE__" > monitor.txt
-            echo "0-test" > pr.txt
+            echo "publish2 dev PR-1-test __FILE__" > monitor.txt
+            echo "1-test" > pr.txt
           else
             VERSION_REGEX="^v([0-9a-z\.\-]+)$"
             if [[ ${GITHUB_REF#refs/tags/} =~ $VERSION_REGEX ]]; then
@@ -169,8 +169,9 @@ jobs:
 
           for repo in $private_repos; do
             if [[ -d html/$repo ]]; then
-              azcopy copy "https://ncsdocsa.blob.core.windows.net/ncs-doc-authorization/${repo}_htaccess.txt" html/$repo/.htaccess
+              azcopy copy "https://ncsdocsa.blob.core.windows.net/ncs-doc-authorization/template.htaccess" html/$repo/.htaccess
               sed -i "s/__PASSWORD__/${{ secrets.DOC_ID_PASSWORD }}/g" html/$repo/.htaccess
+              sed -i "s/__DOCSET__/$repo/g" html/$repo/.htaccess
             fi
           done
 
