@@ -13,6 +13,17 @@ jobs:
   list-accounts:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout the code
+        uses: actions/checkout@v2
+        with:
+          path: nrf
+          fetch-depth: 0
+
+      - name: Install script dependencies
+        working-directory: nrf
+        run: |
+          pip3 install -r doc/_scripts/list_accounts/requirements.txt
+
       - name: Create list
         run: |
           mkdir ids
@@ -25,13 +36,10 @@ jobs:
             name=${names[$i-1]}
             repo=${repos[$i-1]}
 
-            curl -s \
-              -H "Accept: application/vnd.github+json" \
-              -H "Authorization: Bearer ${{ secrets.NCS_GITHUB_TOKEN }}" \
-              -H "X-GitHub-Api-Version: 2022-11-28" \
-              https://api.github.com/repos/$repo/collaborators?per_page=100 \
-            | python3 -c 'import sys, json; [print(f"""{o["id"]}-github""") for o in json.load(sys.stdin)]' \
-            >> ids_${name}.txt
+            python3 nrf/doc/_scripts/list_accounts/list_accounts.py \
+              --token "${{ secrets.NCS_GITHUB_TOKEN }}" \
+              --repository "$repo" \
+              --output-file "ids_${name}.txt"
 
             touch ids/github_${name}_users.pwd
             for id in $(cat ids_${name}.txt); do
