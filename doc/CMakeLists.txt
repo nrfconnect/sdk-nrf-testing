@@ -11,6 +11,7 @@
 # Intersphinx (http://www.sphinx-doc.org/en/master/usage/extensions/intersphinx.html)
 # is used to link documentation sets together. It is configured in the Sphinx
 # configuration files.
+# Test change
 
 cmake_minimum_required(VERSION 3.20.0)
 project(nrf-connect-sdk-doc LANGUAGES NONE)
