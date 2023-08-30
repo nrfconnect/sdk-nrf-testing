@@ -1,5 +1,13 @@
-@Library("CI_LIB") _
+pipeline {
+    agent {
+        label 'build-ncs'
+    } 
 
-def pipeline = new ncs.sdk_nrf.Main()
-
-pipeline.run(JOB_NAME)
+    stages {
+        stage('Echo Test') {
+            steps {
+                echo 'test'
+            }
+        }
+    }
+}
