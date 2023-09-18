@@ -56,7 +56,7 @@ jobs:
           OLD=ncs/nrf/scripts/requirements-fixed.txt
           DIFF_OUTPUT=$(diff -y $NEW $OLD) || true  # Add || true to avoid step failure
           if [[ -n "$DIFF_OUTPUT" ]]; then
-            echo "Differences found!"
+            echo "Differences found! Making autocommit"
             echo "difference=true" >> $GITHUB_OUTPUT
             echo '${{ steps.diff.outputs.difference }}'
           else
@@ -79,6 +79,7 @@ jobs:
 
           Signed-off-by: Nordic Builder <NordicBuilder@nordicsemi.no>
           EOF
+          git remote set-url origin https://${{ secrets.NCS_GITHUB_TOKEN }}@github.com/nrfconnect/sdk-nrf-testing.git
           git push origin HEAD:${{ github.head_ref }}
 
       - name: Post summary
