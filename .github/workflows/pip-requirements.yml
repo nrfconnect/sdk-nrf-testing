@@ -10,7 +10,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-20.04
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -25,7 +24,6 @@ jobs:
           echo "pr_repo_owner=${{ github.event.pull_request.head.repo.owner.login }}" >> $GITHUB_OUTPUT
 
       - name: Commit and push changes
-        uses: actions/checkout@v3
         working-directory: ncs/nrf
         run: |
           echo test >> test
