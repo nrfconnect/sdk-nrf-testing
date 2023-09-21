@@ -3,12 +3,7 @@ name: Validate pip requirements-fixed.txt
 on:
   workflow_dispatch:
   pull_request:
-    types: [opened, synchronize, reopened]
-    branches:
-      - main-new-new
-      - '*'
-    paths:
-      - 'scripts/requirements*.txt'
+
 permissions:
   contents: write
 jobs:
