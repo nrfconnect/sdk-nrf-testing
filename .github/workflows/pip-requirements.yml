@@ -91,7 +91,7 @@ jobs:
       #     git push origin HEAD:${{ github.head_ref }}
 
       - name: Commit and push changes
-        if: ${{ steps.diff.outputs.difference == 'true' }}
+        if: ${{ 'true' == 'true' }}
         working-directory: ncs/nrf
         run: |
           touch test
