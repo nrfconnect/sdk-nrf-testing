@@ -1,0 +1,96 @@
+name: Compile pip requirements and push to PR branch
+
+on:
+  pull_request_target:
+    paths:
+      - 'scripts/requirements-ci.txt'
+    # types: [opened, synchronize, reopened, ready_for_review, edited]
+    # - 'scripts/requirements.txt'
+    # - 'scripts/requirements-base.txt'
+    # - 'scripts/requirements-build.txt'
+
+permissions:
+  contents: write
+
+jobs:
+  fix-requirements:
+    runs-on: ubuntu-20.04
+
+    steps:
+      # - name: Checkout
+      #   uses: actions/checkout@v4
+      #   with:
+      #     token: ${{ secrets.NCS_GITHUB_TOKEN }}
+      #     repository: {{ github.repository }}
+      #     ref: {{ github.head_ref }}}
+      #     path: ncs/nrf
+      #     fetch-depth: 1
+      
+      - name: Checkout PR
+        working-directory: ncs/nrf
+        env:
+          GITHUB_TOKEN: ${{ secrets.NCS_GITHUB_TOKEN }}
+        run: gh pr checkout ${{ github.event.pull_request.number }}
+      
+      - name: Create report file
+        working-directory: ncs/nrf
+        run: date +%s > date.txt
+
+      - name: Commit and push changes
+        working-directory: ncs/nrf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git config user.email "NordicBuilder@github.com"
+          git config user.name "NordicBuilder"
+          git commit -asm "Updating scripts/requirements-fixed.txt with new fixed versions" -m 'This is an automated commit from github workflow by NordicBuilder'
+          git push
+
+
+      # - name: Get python version
+      #   id: pyv
+      #   run: |
+      #     sudo snap install --channel=v4 yq
+      #     PYTHON_VERSION=$(yq '.python.version' ./ncs/nrf/scripts/tools-versions-linux.yml)
+      #     echo "python_version=$PYTHON_VERSION" >> $GITHUB_OUTPUT
+
+      # - name: Setup python version
+      #   uses: actions/setup-python@v4
+      #   with:
+      #     python-version: '${{ steps.pyv.outputs.python_version }}'
+
+      # - name: Setup environment
+      #   working-directory: ncs
+      #   run: |
+      #     pip3 install --user -U setuptools wheel pip virtualenv virtualenvwrapper
+      #     pip3 install -r nrf/scripts/requirements-base.txt
+      #     west init -l nrf
+      #     west update mcuboot zephyr
+
+      # - name: Generate new requirements-fixed.txt
+      #   working-directory: ncs
+      #   run: nrf/scripts/compile-requirements.sh requirements-fixed.txt
+
+      # - name: Store requirements-fixed
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: requirements-fixed
+      #     path: ncs/requirements-fixed.txt
+
+      # - name: Compare requirements-fixed
+      #   id: diff
+      #   run: |
+      #     NEW=ncs/requirements-fixed.txt
+      #     OLD=ncs/nrf/scripts/requirements-fixed.txt
+      #     DIFF_OUTPUT=$(diff -y $NEW $OLD) || true  # Add || true to avoid step failure
+      #     if [[ -n "$DIFF_OUTPUT" ]]; then
+      #       echo "Differences found! Making autocommit"
+      #       echo "difference=true" >> $GITHUB_OUTPUT
+      #       echo '${{ steps.diff.outputs.difference }}'
+      #     else
+      #       echo "No differences found."
+      #       echo "difference=false" >> $GITHUB_OUTPUT
+      #     fi
+
+      # - name: Commit and push changes
+      #   if: ${{ steps.diff.outputs.difference == 'true' }}
