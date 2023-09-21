@@ -13,18 +13,18 @@ jobs:
   build:
     runs-on: ubuntu-20.04
 
-    # steps:
-    #   - name: Checkout
-    #     uses: actions/checkout@v3
-    #     with:
-    #       ref: refs/pull/${{ github.event.pull_request.number }}/head
-    #       path: ncs/nrf
-    #       fetch-depth: 0
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: refs/pull/${{ github.event.pull_request.number }}/head
+          path: ncs/nrf
+          fetch-depth: 0
 
-    #   - name: Determine PR Origin
-    #     id: pr-origin
-    #     run: |
-    #       echo "pr_repo_owner=${{ github.event.pull_request.head.repo.owner.login }}" >> $GITHUB_OUTPUT
+      - name: Determine PR Origin
+        id: pr-origin
+        run: |
+          echo "pr_repo_owner=${{ github.event.pull_request.head.repo.owner.login }}" >> $GITHUB_OUTPUT
 
     #   - name: Get python version
     #     id: pyv
