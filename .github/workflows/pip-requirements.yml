@@ -13,72 +13,91 @@ jobs:
   build:
     runs-on: ubuntu-20.04
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          ref: refs/pull/${{ github.event.pull_request.number }}/head
-          path: ncs/nrf
-          fetch-depth: 0
+    # steps:
+    #   - name: Checkout
+    #     uses: actions/checkout@v3
+    #     with:
+    #       ref: refs/pull/${{ github.event.pull_request.number }}/head
+    #       path: ncs/nrf
+    #       fetch-depth: 0
 
-      - name: Determine PR Origin
-        id: pr-origin
-        run: |
-          echo "pr_repo_owner=${{ github.event.pull_request.head.repo.owner.login }}" >> $GITHUB_OUTPUT
+    #   - name: Determine PR Origin
+    #     id: pr-origin
+    #     run: |
+    #       echo "pr_repo_owner=${{ github.event.pull_request.head.repo.owner.login }}" >> $GITHUB_OUTPUT
 
-      - name: Get python version
-        id: pyv
-        run: |
-          sudo snap install --channel=v4 yq
-          PYTHON_VERSION=$(yq '.python.version' ./ncs/nrf/scripts/tools-versions-linux.yml)
-          echo "python_version=$PYTHON_VERSION" >> $GITHUB_OUTPUT
+    #   - name: Get python version
+    #     id: pyv
+    #     run: |
+    #       sudo snap install --channel=v4 yq
+    #       PYTHON_VERSION=$(yq '.python.version' ./ncs/nrf/scripts/tools-versions-linux.yml)
+    #       echo "python_version=$PYTHON_VERSION" >> $GITHUB_OUTPUT
 
-      - name: Setup python version
-        uses: actions/setup-python@v4
-        with:
-          python-version: '${{ steps.pyv.outputs.python_version }}'
+    #   - name: Setup python version
+    #     uses: actions/setup-python@v4
+    #     with:
+    #       python-version: '${{ steps.pyv.outputs.python_version }}'
 
-      - name: Setup environment
-        working-directory: ncs
-        run: |
-          pip3 install --user -U setuptools wheel pip virtualenv virtualenvwrapper
-          pip3 install -r nrf/scripts/requirements-base.txt
-          west init -l nrf
-          west update mcuboot zephyr
+    #   - name: Setup environment
+    #     working-directory: ncs
+    #     run: |
+    #       pip3 install --user -U setuptools wheel pip virtualenv virtualenvwrapper
+    #       pip3 install -r nrf/scripts/requirements-base.txt
+    #       west init -l nrf
+    #       west update mcuboot zephyr
 
-      - name: Generate new requirements-fixed.txt
-        working-directory: ncs
-        run: nrf/scripts/compile-requirements.sh requirements-fixed.txt
+    #   - name: Generate new requirements-fixed.txt
+    #     working-directory: ncs
+    #     run: nrf/scripts/compile-requirements.sh requirements-fixed.txt
 
-      - name: Store requirements-fixed
-        uses: actions/upload-artifact@v3
-        with:
-          name: requirements-fixed
-          path: ncs/requirements-fixed.txt
+    #   - name: Store requirements-fixed
+    #     uses: actions/upload-artifact@v3
+    #     with:
+    #       name: requirements-fixed
+    #       path: ncs/requirements-fixed.txt
 
-      - name: Compare requirements-fixed
-        id: diff
-        run: |
-          NEW=ncs/requirements-fixed.txt
-          OLD=ncs/nrf/scripts/requirements-fixed.txt
-          DIFF_OUTPUT=$(diff -y $NEW $OLD) || true  # Add || true to avoid step failure
-          if [[ -n "$DIFF_OUTPUT" ]]; then
-            echo "Differences found! Making autocommit"
-            echo "difference=true" >> $GITHUB_OUTPUT
-            echo '${{ steps.diff.outputs.difference }}'
-          else
-            echo "No differences found."
-            echo "difference=false" >> $GITHUB_OUTPUT
-          fi
+    #   - name: Compare requirements-fixed
+    #     id: diff
+    #     run: |
+    #       NEW=ncs/requirements-fixed.txt
+    #       OLD=ncs/nrf/scripts/requirements-fixed.txt
+    #       DIFF_OUTPUT=$(diff -y $NEW $OLD) || true  # Add || true to avoid step failure
+    #       if [[ -n "$DIFF_OUTPUT" ]]; then
+    #         echo "Differences found! Making autocommit"
+    #         echo "difference=true" >> $GITHUB_OUTPUT
+    #         echo '${{ steps.diff.outputs.difference }}'
+    #       else
+    #         echo "No differences found."
+    #         echo "difference=false" >> $GITHUB_OUTPUT
+    #       fi
+
+      # - name: Commit and push changes
+      #   if: ${{ steps.diff.outputs.difference == 'true' }}
+      #   working-directory: ncs/nrf
+      #   run: |
+      #     mv ../requirements-fixed.txt ./scripts/requirements-fixed.txt
+      #     git config user.email "NordicBuilder@github.com"
+      #     git config user.name "NordicBuilder"
+      #     git add ./scripts/requirements-fixed.txt
+      #     git commit -F- <<EOF
+      #     echo test12
+      #     Update requirements-fixed.txt from NordicBuilder
+
+      #     Automatically upload changed requirements-fixed.txt
+
+      #     Signed-off-by: Nordic Builder <NordicBuilder@nordicsemi.no>
+      #     EOF
+      #     git remote set-url origin https://NordicBuilder:${{ secrets.NCS_GITHUB_TOKEN }}@github.com/${{ steps.pr-origin.outputs.pr_repo_owner }}/sdk-nrf-testing.git
+      #     git push origin HEAD:${{ github.head_ref }}
 
       - name: Commit and push changes
         if: ${{ steps.diff.outputs.difference == 'true' }}
         working-directory: ncs/nrf
         run: |
-          mv ../requirements-fixed.txt ./scripts/requirements-fixed.txt
+          touch test
           git config user.email "NordicBuilder@github.com"
           git config user.name "NordicBuilder"
-          git add ./scripts/requirements-fixed.txt
+          git add ./test
           git commit -F- <<EOF
           echo test12
           Update requirements-fixed.txt from NordicBuilder
