@@ -80,7 +80,7 @@ jobs:
           git config user.name "NordicBuilder"
           git add ./scripts/requirements-fixed.txt
           git commit -F- <<EOF
-          echo test1
+          echo test12
           Update requirements-fixed.txt from NordicBuilder
 
           Automatically upload changed requirements-fixed.txt
