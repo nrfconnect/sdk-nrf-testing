@@ -29,6 +29,7 @@ jobs:
         working-directory: ncs/nrf
         run: |
           touch test
+          echo test
           git config --global user.email "NordicBuilder@github.com"
           git config --global user.name "NordicBuilder"
           git add ./test
