@@ -15,3 +15,4 @@ stringcase==1.2.0
 typed-ast
 toml
 wget
+python-mpd2
