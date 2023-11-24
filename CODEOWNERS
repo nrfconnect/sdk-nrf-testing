@@ -189,10 +189,10 @@ Kconfig*                                  @tejlmand
 /samples/wifi/sta/                        @D-Triveni @bama-nordic
 /samples/wifi/sr_coex/                    @muraliThokala @bama-nordic
 /samples/wifi/twt/                        @chiranjeevi2776 @krish2718
-/scripts/                                 @tejlmand @nrfconnect/ncs-code-owners
+/scripts/                                 @nrfconnect/ncs-code-owners
 /scripts/hid_configurator/                @MarekPieta
-/scripts/tools-versions-*.txt             @tejlmand @grho @shanthanordic @ihansse
-/scripts/requirements-*.txt               @tejlmand @grho @shanthanordic @ihansse
+/scripts/tools-versions-*.txt             @nrfconnect/ncs-code-owners
+/scripts/requirements-*.txt               @nrfconnect/ncs-code-owners
 /scripts/west_commands/sbom/              @doki-nordic @maje-emb
 /scripts/bootloader/                      @hakonfam @sigvartmh
 /scripts/ncs-docker-version.txt           @nrfconnect/ncs-ci
