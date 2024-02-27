@@ -10,6 +10,7 @@
 #include <string.h>
 #include <assert.h>
 
+// a comment
 
 #include <zephyr/kernel.h>
 #include <zephyr/drivers/entropy.h>
