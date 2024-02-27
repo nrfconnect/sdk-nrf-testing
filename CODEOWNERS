@@ -13,10 +13,13 @@
 /README.rst                               @carlescufi
 /west.yml                                 @rlubos
 
+
 # Invividual folders
-drivers/				  @gmarull
+drivers/**				  @ncs-co-drivers
 doc/					  @jukkar
 zephyr/                                   @carlescufi
+
+drivers/entropy/**			  @57300
 
 # Global overrides
 *.rst                                     @gmarull
