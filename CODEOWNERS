@@ -16,10 +16,11 @@
 
 # Invividual folders
 drivers/**				  @ncs-co-drivers
+drivers/entropy/**			  @ncs-co-usb @57300
+drivers/**/CMakeLists.txt		  @ncs-co-build-system
 doc/					  @jukkar
 zephyr/                                   @carlescufi
 
-drivers/entropy/**			  @57300
 
 # Global overrides
 *.rst                                     @gmarull
