@@ -16,15 +16,19 @@
 
 # Invividual folders
 drivers/**				  @nrfconnect/ncs-co-drivers
-drivers/entropy/**			  @nrfconnect/ncs-co-usb @57300
 doc/					  @jukkar
 zephyr/                                   @carlescufi
 
 # Global overrides
 *.rst                                     @gmarull
-CMakeLists.txt				  @nrfconnect/ncs-co-build-system
 **/bindings/				  @jukkar
-/cmake/					  @tejlmand
 
 
+# Contributor ownership
+drivers/entropy/**			  @57300
+lib/nrf_modem_lib/		          @ncs-co-networking @lemrey
 
+# CO overrides 
+*.cmake
+/cmake/					  @ncs-co-build-system
+CMakeLists.txt				  @nrfconnect/ncs-co-build-system
