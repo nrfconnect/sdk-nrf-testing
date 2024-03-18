@@ -27,8 +27,10 @@ jobs:
       - name: Install West
         run: pip install west
 
-      - name: West Update
-        run: west update
+      - name: Initialize West Workspace
+        run: |
+          west init -l .
+          west update
 
       - name: Zip repository
         run: zip -r sdk-repository-${{ github.sha }}.zip . -x "*.git*"
