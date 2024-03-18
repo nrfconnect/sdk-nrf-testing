@@ -1,0 +1,24 @@
+name: Zip Repository on Tag
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  zip-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Zip repository
+        run: zip -r repository-${{ github.ref_name }}.zip . -x "*.git*"
+
+      - name: Upload ZIP as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: repository-zip
+          path: repository-${{ github.ref_name }}.zip
