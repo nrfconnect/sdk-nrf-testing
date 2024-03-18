@@ -1,0 +1,34 @@
+name: Zip and Send
+on:
+  push:
+    tags:
+      - '*'
+jobs:
+  zip-and-upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          submodules: 'recursive'
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Install West
+        run: pip install west
+
+      - name: West Update
+        run: |
+          west init -l .
+          west update
+
+      - name: Zip repository
+        run: zip -r sdk-repository-${{ github.ref_name }}.zip . -x "*.git*"
+
+      - name: Upload to Artifactory
+        run: |
+          curl -u ${{ secrets.ARTIFACTORY_BURAN_CI_TOKEN }} -T sdk-repository-${{ github.ref_name }}.zip https://eu.files.nordicsemi.com/artifactory/ncs-src-mirror/${{ github.ref_name }}/sdk-repository-${{ github.ref_name }}.zip
