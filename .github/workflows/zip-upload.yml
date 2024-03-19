@@ -35,8 +35,12 @@ jobs:
       - name: Zip repository
         run: zip -r sdk-repository-${{ github.sha }}.zip . -x "*.git*"
 
-      - name: Upload ZIP as artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: sdk-repository-zip
-          path: sdk-repository-${{ github.sha }}.zip
+      # - name: Upload ZIP as artifact
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: sdk-repository-zip
+      #     path: sdk-repository-${{ github.sha }}.zip
+
+      - name: Upload to Artifactory
+            run: |
+              curl -H "X-JFrog-Art-Api:${{ secrets.ARTIFACTORY_BURAN_CI_TOKEN }}" -T sdk-repository-${{ github.sha }}.zip "https://artifactory.nordicsemi.no/artifactory/ncs-source-mirror/sdk-repository-${{ github.sha }}.zip"
