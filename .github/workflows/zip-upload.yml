@@ -33,9 +33,9 @@ jobs:
       #     west update
 # 
       - name: Zip repository
-        run: zip -r sdk-repository-${{ github.ref_name }}.zip . -x "*.git*"
+        run: zip -r sdk-repository-${{ github.sha }}.zip . -x "*.git*"
 
       - name: Upload to Artifactory
         run: |
-          curl -u "${{ secrets.ARTIFACTORY_BURAN_CI_TOKEN }}" -T sdk-repository-${{ github.ref_name }}.zip "https://eu.files.nordicsemi.com/artifactory/ncs-source-mirror/${{ github.ref_name }}/sdk-repository-${{ github.sha }}.zip"
+          curl -u ${{ secrets.ARTIFACTORY_BURAN_CI_TOKEN }} -T sdk-repository-${{ github.sha }}.zip "https://eu.files.nordicsemi.com/artifactory/ncs-source-mirror/sdk-repository-${{ github.sha }}.zip"
 
