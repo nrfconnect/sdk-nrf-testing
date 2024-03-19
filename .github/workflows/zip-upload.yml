@@ -37,4 +37,4 @@ jobs:
 
       - name: Upload to Artifactory
         run: |
-          curl -u ${{ secrets.ARTIFACTORY_BURAN_CI_TOKEN }} -T sdk-repository-${{ github.ref_name }}.zip https://eu.files.nordicsemi.com/artifactory/ncs-src-mirror/sdk-repository-${{ github.ref_name }}.zip
+          curl -u ${{ secrets.ARTIFACTORY_BURAN_CI_TOKEN }} -T sdk-repository-${{ github.ref_name }}.zip https://eu.files.nordicsemi.com/artifactory/ncs_source_mirror/sdk-repository-${{ github.ref_name }}.zip
