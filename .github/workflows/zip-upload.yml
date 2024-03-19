@@ -27,14 +27,14 @@ jobs:
       - name: Install West
         run: pip install west
 
-      - name: Initialize West Workspace
-        run: |
-          west init -l .
-          west update
+      # - name: West Update
+      #   run: |
+      #     west init -l .
+      #     west update
 
       - name: Zip repository
         run: zip -r sdk-repository-${{ github.sha }}.zip . -x "*.git*"
 
       - name: Upload to Artifactory
         run: |
-          curl -H "X-JFrog-Art-Api:${{ secrets.ARTIFACTORY_BURAN_CI_TOKEN }}" -T sdk-repository-${{ github.sha }}.zip "https://artifactory.nordicsemi.no/artifactory/ncs-source-mirror/sdk-repository-${{ github.sha }}.zip"
+          curl -H "X-JFrog-Art-Api:${{ secrets.ARTIFACTORY_BURAN_CI_TOKEN }}" -T sdk-repository-${{ github.sha }}.zip "https://eu.files.nordicsemi.com/artifactory//ncs-source-mirror/sdk-repository-${{ github.sha }}.zip"
