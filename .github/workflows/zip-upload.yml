@@ -1,13 +1,13 @@
 name: Zip and Send
-# on:
-#   push:
-#     tags:
-#       - '*'
-
 on:
   push:
-    branches:
-      - zipAndSend
+    tags:
+      - '*'
+
+# on:
+#   push:
+#     branches:
+#       - zipAndSend
 
 jobs:
   zip-and-upload:
@@ -27,14 +27,14 @@ jobs:
       - name: Install West
         run: pip install west
 
-      # - name: West Update
-      #   run: |
-      #     west init -l .
-      #     west update
-# 
+      - name: West Update
+        run: |
+          west init -l .
+          west update
+
       - name: Zip repository
         run: zip -r sdk-repository-${{ github.ref_name }}.zip . -x "*.git*"
 
       - name: Upload to Artifactory
         run: |
-          curl -u ${{ secrets.ARTIFACTORY_BURAN_CI_TOKEN }} -T sdk-repository-${{ github.ref_name }}.zip https://eu.files.nordicsemi.com/artifactory/ncs_source_mirror/sdk-repository-${{ github.ref_name }}.zip
+          curl -u ${{ secrets.ARTIFACTORY_BURAN_CI_TOKEN }} -T sdk-repository-${{ github.ref_name }}.zip https://eu.files.nordicsemi.com/artifactory/ncs_source_mirror/${{ github.ref_name }}/sdk-repository-${{ github.ref_name }}.zip
