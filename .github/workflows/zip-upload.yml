@@ -37,4 +37,4 @@ jobs:
 
       - name: Upload to Artifactory
         run: |
-          curl -H "X-JFrog-Art-Api:${{ secrets.ARTIFACTORY_BURAN_CI_TOKEN }}" -T sdk-repository-${{ github.sha }}.zip "https://eu.files.nordicsemi.com/artifactory//ncs-source-mirror/sdk-repository-${{ github.sha }}.zip"
+          curl -H "X-JFrog-Art-Api:${{ secrets.com_nordicsemi_files-buran_ci }}" -T sdk-repository-${{ github.sha }}.zip "https://eu.files.nordicsemi.com/artifactory//ncs-source-mirror/sdk-repository-${{ github.sha }}.zip"
