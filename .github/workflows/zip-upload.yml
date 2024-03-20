@@ -1,8 +1,8 @@
 name: Zip and Send
 on:
   push:
-    tags:
-      - '*'
+    branches:
+      - zipAndSend # Trigger on pushes to the main branch
 
 jobs:
   zip-and-upload:
