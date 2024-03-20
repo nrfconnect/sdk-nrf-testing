@@ -34,7 +34,9 @@ jobs:
 
       - name: Zip repository
         run: |
+          ls
           cd ..
+          ls
           tar  --exclude "*.git*" --exclude "*" -czvf sdk-repository-${{ github.ref_name }}.tar.gz .
       - name: Upload to Artifactory
         run: |
