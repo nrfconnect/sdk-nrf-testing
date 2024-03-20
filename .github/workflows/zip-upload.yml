@@ -36,10 +36,16 @@ jobs:
       - name: West update
         run: west update
 
+      - name: Debug
+        run: |
+          ls
+          du -sh ./*
+          ls sdk-nrf
+
       - name: Create tar.gz 
         run: |
-          tar --exclude='.git' --exclude='*.tar.gz' -czvf sdk-repository-${{ github.ref_name }}.tar.gz .
-
+          # tar --exclude='.git' --exclude='*.tar.gz' -czf sdk-repository-${{ github.ref_name }}.tar.gz .
+          tar -zcf sdk-repository-${{ github.ref_name }}.tar.gz .
       - name: Upload to Artifactory
         run: |
           cd ..
