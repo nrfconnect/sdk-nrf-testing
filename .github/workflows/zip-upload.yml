@@ -47,7 +47,8 @@ jobs:
 
       - name: Create tar.gz 
         run: |
-          tar --exclude=".git" --exclude="*.tar.gz" -czf sdk-repository-${{ github.ref_name }}.tar.gz .
+          cd ..
+          tar --exclude=".git" --exclude="*.tar.gz" -czf sdk-repository-${{ github.ref_name }}.tar.gz sdk-nrf-testing
 
       - name: Upload to Artifactory
         run: |
