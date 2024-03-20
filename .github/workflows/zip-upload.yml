@@ -16,6 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
         with:
+          path: sdk-nrf
           fetch-depth: 0
           submodules: 'recursive'
 
@@ -27,17 +28,18 @@ jobs:
       - name: Install West
         run: pip install west
 
-      - name: West Update
+      - name: Initialize West
         run: |
+          cd sdk-nrf
           west init -l .
-          west update
 
-      - name: Zip repository
+      - name: West update
+        run: west update
+
+      - name: Create tar.gz 
         run: |
-          ls
-          cd ..
-          ls
-          tar  --exclude "*.git*" --exclude "*" -czvf sdk-repository-${{ github.ref_name }}.tar.gz .
+          tar --exclude='.git' --exclude='*.tar.gz' -czvf sdk-repository-${{ github.ref_name }}.tar.gz .
+
       - name: Upload to Artifactory
         run: |
           cd ..
