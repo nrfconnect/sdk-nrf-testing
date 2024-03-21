@@ -18,10 +18,10 @@ jobs:
         with:
           git-fetch-depth: 0
           path: nrf
-      -name: Debug
-       run: |
-        ls
-        pwd
+      - name: Debug
+        run: |
+          ls
+          pwd
       # - name: Create tar.gz
       #   run: >
       #     cd .. && tar --exclude="*.tar.gz" -czf
