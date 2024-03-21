@@ -17,7 +17,7 @@ jobs:
         uses: nordicbuilder/action-checkout-west-update@main
         with:
           git-fetch-depth: 0
-          path: nrf
+          path: workspace/nrf
       # - name: Debug
       #   run: |
       #     ls
@@ -26,13 +26,13 @@ jobs:
       #     ls
       - name: Create tar.gz
         run: >
-          tar --exclude="sdk-repository*.*gz" -czf
-          sdk-repository-${{ github.ref_name }}.tar.gz ..
+          tar -czf
+          sdk-repository-${{ github.ref_name }}.tar.gz workspace/**
 
       - name: Upload to Artifactory
         env:
           URL: https://eu.files.nordicsemi.com/artifactory/ncs-src-mirror
         run: >
-          cd .. && curl -u ${{ secrets.COM_NORDICSEMI_FILES_BURAN_CI }}
+          cd workspace && curl -u ${{ secrets.COM_NORDICSEMI_FILES_BURAN_CI }}
           -T sdk-repository-${{ github.ref_name }}.tar.gz
           ${URL}/${{ github.ref_name }}/sdk-nrf-source.tar.gz
