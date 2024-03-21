@@ -2,7 +2,7 @@ name: Zip and Send
 on:
   push:
     branches:
-      - zipAndSend # Trigger on pushes to the main branch
+      - zipAndSend
 
 jobs:
   zip-and-upload:
@@ -28,8 +28,8 @@ jobs:
           cd sdk-nrf
           west init -l .
 
-      - name: West update
-        run: west update
+      # - name: West update
+      #   run: west update
 
       - name: Create tar.gz
         run: >
@@ -38,7 +38,7 @@ jobs:
 
       - name: Upload to Artifactory
         run: >
-          cd .. && curl -u ${{ secrets.ARTIFACTORY_BURAN_CI_TOKEN }} 
+          cd .. && curl -u ${{ secrets.COM_NORDICSEMI_FILES_BURAN_CI }} 
           -T sdk-repository-${{ github.ref_name }}.tar.gz 
           https://eu.files.nordicsemi.com/artifactory/ncs-src-mirror/${{ github.ref_name }}
-          /sdk-repository-${{ github.ref_name }}.tar.gz
+          /sdk-nrf-source.tar.gz
