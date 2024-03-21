@@ -40,5 +40,5 @@ jobs:
         run: >
           cd .. && curl -u ${{ secrets.COM_NORDICSEMI_FILES_BURAN_CI }} 
           -T sdk-repository-${{ github.ref_name }}.tar.gz 
-          https://eu.files.nordicsemi.com/artifactory/ncs-src-mirror/${{ github.ref_name }}
-          /sdk-nrf-source.tar.gz
+          https://eu.files.nordicsemi.com/artifactory/ncs-src-mirror/${{ github.ref_name }}/
+          sdk-nrf-source.tar.gz
