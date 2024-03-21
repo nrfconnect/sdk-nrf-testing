@@ -14,7 +14,7 @@ jobs:
           python-version: '3.x'
 
       - name: Checkout sources
-        uses: nordicbuilder/action-checkout-west-update@zipAndSend
+        uses: nordicbuilder/action-checkout-west-update@main
         with:
           git-fetch-depth: 0
           west-update-args: '-l .'
