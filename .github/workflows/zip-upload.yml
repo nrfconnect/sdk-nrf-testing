@@ -33,13 +33,13 @@ jobs:
 
       - name: Create tar.gz
         run: >
-          cd .. && tar --exclude="*.tar.gz" -czf \
-          sdk-repository-${{ github.ref_name }}.tar.gz sdk-nrf-testing
+          cd .. && tar --exclude="*.tar.gz" -czf
+           sdk-repository-${{ github.ref_name }}.tar.gz sdk-nrf-testing
 
       - name: Upload to Artifactory
         env:
           URL: https://eu.files.nordicsemi.com/artifactory/ncs-src-mirror
         run: >
-          cd .. && curl -u ${{ secrets.COM_NORDICSEMI_FILES_BURAN_CI }} \
-          -T sdk-repository-${{ github.ref_name }}.tar.gz \
-          ${URL}/${{ github.ref_name }}/sdk-nrf-source.tar.gz
+          cd .. && curl -u ${{ secrets.COM_NORDICSEMI_FILES_BURAN_CI }}
+           -T sdk-repository-${{ github.ref_name }}.tar.gz
+           ${URL}/${{ github.ref_name }}/sdk-nrf-source.tar.gz
