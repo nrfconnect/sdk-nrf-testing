@@ -22,6 +22,8 @@ jobs:
         run: |
           ls
           pwd
+          cd ..
+          ls
       # - name: Create tar.gz
       #   run: >
       #     cd .. && tar --exclude="*.tar.gz" -czf
