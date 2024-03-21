@@ -37,8 +37,9 @@ jobs:
           sdk-repository-${{ github.ref_name }}.tar.gz sdk-nrf-testing
 
       - name: Upload to Artifactory
+        env:
+          URL: https://eu.files.nordicsemi.com/artifactory/ncs-src-mirror
         run: >
           cd .. && curl -u ${{ secrets.COM_NORDICSEMI_FILES_BURAN_CI }} 
           -T sdk-repository-${{ github.ref_name }}.tar.gz 
-          https://eu.files.nordicsemi.com/artifactory/ncs-src-mirror/${{ github.ref_name }}/
-          sdk-nrf-source.tar.gz
+          ${URL}/${{ github.ref_name }}/sdk-nrf-source.tar.gz
