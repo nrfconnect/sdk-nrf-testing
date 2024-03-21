@@ -32,11 +32,13 @@ jobs:
         run: west update
 
       - name: Create tar.gz
-        run: |
-          cd ..
-          tar --exclude=".git" --exclude="*.tar.gz" -czf sdk-repository-${{ github.ref_name }}.tar.gz sdk-nrf-testing
+        run: >
+          cd .. && tar --exclude="*.tar.gz" -czf 
+          sdk-repository-${{ github.ref_name }}.tar.gz sdk-nrf-testing
 
       - name: Upload to Artifactory
-        run: |
-          cd ..
-          curl -u ${{ secrets.ARTIFACTORY_BURAN_CI_TOKEN }} -T sdk-repository-${{ github.ref_name }}.tar.gz https://eu.files.nordicsemi.com/artifactory/ncs-src-mirror/${{ github.ref_name }}/sdk-repository-${{ github.ref_name }}.tar.gz
+        run: >
+          cd .. && curl -u ${{ secrets.ARTIFACTORY_BURAN_CI_TOKEN }} 
+          -T sdk-repository-${{ github.ref_name }}.tar.gz 
+          https://eu.files.nordicsemi.com/artifactory/ncs-src-mirror/${{ github.ref_name }}
+          /sdk-repository-${{ github.ref_name }}.tar.gz
