@@ -18,8 +18,8 @@ jobs:
         with:
           git-fetch-depth: 0
           path: nrf
-      -name :Debug
-      run: |
+      -name: Debug
+       run: |
         ls
         pwd
       # - name: Create tar.gz
