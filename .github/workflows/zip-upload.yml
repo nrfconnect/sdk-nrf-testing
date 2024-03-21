@@ -24,15 +24,14 @@ jobs:
       #     pwd
       #     cd ..
       #     ls
-      - name: Create tar.gz
+      - name: Create tar
         run: >
-          tar -czf
-          sdk-repository-${{ github.ref_name }}.tar.gz workspace/**
+          tar -C ./workspace -cvf src.tar.gz .
 
       - name: Upload to Artifactory
         env:
           URL: https://eu.files.nordicsemi.com/artifactory/ncs-src-mirror
         run: >
           curl -u ${{ secrets.COM_NORDICSEMI_FILES_BURAN_CI }}
-          -T sdk-repository-${{ github.ref_name }}.tar.gz
+          -T src.tar.gz
           ${URL}/${{ github.ref_name }}/sdk-nrf-source.tar.gz
