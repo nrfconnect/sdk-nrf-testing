@@ -8,25 +8,31 @@ jobs:
   zip-and-upload:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-        with:
-          path: sdk-nrf
-          fetch-depth: 0
-          submodules: 'recursive'
-
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
 
-      - name: Install West
-        run: pip install west
+      - name: Checkout sources
+        uses: nordicbuilder/action-checkout-west-update@zipAndSend
+        with:
+          git-fetch-depth: 0
+          west-update-args: '-l .'
+          path: nrf
+      # - name: Checkout repository
+      #   uses: actions/checkout@v2
+      #   with:
+      #     path: nrf
+      #     fetch-depth: 0
+      #     submodules: 'recursive'
 
-      - name: Initialize West
-        run: |
-          cd sdk-nrf
-          west init -l .
+      # - name: Install West
+      #   run: pip install west
+
+      # - name: Initialize West
+      #   run: |
+      #     cd nrf
+      #     west init -l .
 
       # - name: West update
       #   run: west update
@@ -34,7 +40,7 @@ jobs:
       - name: Create tar.gz
         run: >
           cd .. && tar --exclude="*.tar.gz" -czf
-          sdk-repository-${{ github.ref_name }}.tar.gz sdk-nrf-testing
+          sdk-repository-${{ github.ref_name }}.tar.gz nrf
 
       - name: Upload to Artifactory
         env:
