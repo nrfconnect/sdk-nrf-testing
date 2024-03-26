@@ -18,20 +18,19 @@ jobs:
         with:
           git-fetch-depth: 0
           path: workspace/nrf
-      # - name: Debug
-      #   run: |
-      #     ls
-      #     pwd
-      #     cd ..
-      #     ls
+
       - name: Create tar
         run: >
           tar -C ./workspace -cvf src.tar.gz .
 
-      - name: Upload to Artifactory
+      - name: Configure and Upload to Artifactory
         env:
-          URL: https://eu.files.nordicsemi.com/artifactory/ncs-src-mirror
+          ARTIFACTORY_URL: https://eu.files.nordicsemi.com/artifactory
+          REPOSITORY: ncs-src-mirror
+          FILE_PATH: src.tar.gz
+          TARGET_PATH: __${{ github.ref_name }}/
         run: >
-          curl -u ${{ secrets.COM_NORDICSEMI_FILES_BURAN_CI }}
-          -T src.tar.gz
-          ${URL}/${{ github.ref_name }}/sdk-nrf-source.tar.gz
+          jfrog rt c add --interactive=false --url=$ARTIFACTORY_URL
+          --user=${{ secrets.COM_NORDICSEMI_FILES_USERNAME }}
+          --password=${{ secrets.COM_NORDICSEMI_FILES_PASSWORD }} &&
+          jfrog rt u $FILE_PATH $REPOSITORY/$TARGET_PATH
