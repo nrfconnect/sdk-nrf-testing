@@ -25,7 +25,7 @@ jobs:
 
       - name: Set up JFrog CLI
         uses: jfrog/setup-jfrog-cli@v4
-        
+        # 
       - name: Configure and Upload to Artifactory
         env:
           ARTIFACTORY_URL: https://eu.files.nordicsemi.com/artifactory
