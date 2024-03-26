@@ -25,7 +25,7 @@ jobs:
 
       - name: Set up JFrog CLI
         uses: jfrog/setup-jfrog-cli@v4
-        # asd
+
       - name: Configure and Upload to Artifactory
         env:
           ARTIFACTORY_URL: https://eu.files.nordicsemi.com/artifactory
@@ -33,7 +33,6 @@ jobs:
           FILE_PATH: src.tar.gz
           TARGET_PATH: __${{ github.ref_name }}/
         run: >
-          jfrog rt c add --interactive=false --url=$ARTIFACTORY_URL
-          --user=${{ secrets.COM_NORDICSEMI_FILES_USERNAME }}
-          --password=${{ secrets.COM_NORDICSEMI_FILES_PASSWORD }} &&
           jfrog rt u $FILE_PATH $REPOSITORY/$TARGET_PATH
+          --url=$ARTIFACTORY_URL --user=${{ secrets.COM_NORDICSEMI_FILES_USERNAME }}
+          --password=${{ secrets.COM_NORDICSEMI_FILES_PASSWORD}}
