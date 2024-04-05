@@ -1,0 +1,9 @@
+cbor2>=5.4.2.post1
+clang-format
+ecdsa
+cryptography>=42.0.4
+imagesize>=1.2.0
+intelhex
+pylint
+zcbor~=0.8.0
+nrf-regtool~=5.1.0

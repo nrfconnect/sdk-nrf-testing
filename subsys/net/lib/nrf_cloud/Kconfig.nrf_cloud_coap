@@ -1,0 +1,56 @@
+# Copyright (c) 2023 Nordic Semiconductor
+#
+# SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+#
+
+menuconfig NRF_CLOUD_COAP
+	bool "nRF Cloud COAP"
+	select CJSON_LIB
+	select ZCBOR
+	select COAP
+	select COAP_EXTENDED_OPTIONS_LEN
+	select COAP_CLIENT
+	select EXPERIMENTAL
+	select LTE_PROPRIETARY_PSM_REQ if (SOC_NRF9161_LACA || SOC_NRF9151_LACA || SOC_NRF9131_LACA)
+
+if NRF_CLOUD_COAP
+
+config NRF_CLOUD_COAP_SERVER_HOSTNAME
+	string "CoAP server hostname"
+	default "coap.nrfcloud.com"
+
+config NRF_CLOUD_COAP_SEC_TAG
+	int "Security tag for credentials"
+	default NRF_CLOUD_SEC_TAG
+
+config NRF_CLOUD_COAP_SERVER_PORT
+	int "CoAP server port"
+	default 5684
+
+config NRF_CLOUD_COAP_GF_CONF
+	bool "Enable configuration options for ground-fix requests"
+	help
+	  The initial release of CoAP for nRF Cloud did not provide a way to
+	  configure the response; it defaulted to always returning the location
+	  and method used to acquire the location. The cloud will soon support
+	  configuration values do_reply, fallback, and hi_conf. When the cloud
+	  support is ready, NRF_CLOUD_COAP_GF_CONF can be set true.
+
+if WIFI
+
+config NRF_CLOUD_COAP_SEND_SSIDS
+	bool "Include access point SSIDs with scan results"
+	default n
+	help
+	  The nRF Cloud Wi-Fi location service does not require the human-
+	  readable SSIDs in order to determine the device location. It does
+	  require the access point MAC addresses. By not including SSIDs
+	  the amount of data sent to the cloud is greatly reduced.
+
+endif # WIFI
+
+module = NRF_CLOUD_COAP
+module-str = nRF Cloud COAP
+source "subsys/logging/Kconfig.template.log_config"
+
+endif # NRF_CLOUD_COAP

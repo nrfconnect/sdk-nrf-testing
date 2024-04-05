@@ -1,0 +1,9 @@
+#
+# Copyright (c) 2021 Nordic Semiconductor ASA
+#
+# SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+#
+
+osource "$(NCS_MEMFAULT_FIRMWARE_SDK_KCONFIG)"
+rsource "hostap/Kconfig"
+rsource "wfa-qt/Kconfig"

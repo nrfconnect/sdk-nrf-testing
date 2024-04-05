@@ -1,0 +1,195 @@
+# The configurations resulting as a product of scenarios and platforms
+# will be skipped if quarantine is used. More details here:
+# https://docs.zephyrproject.org/latest/guides/test/twister.html#quarantine
+
+# This configurations come from tests/samples in sdk-zephyr
+
+- scenarios:
+    - drivers.flash.common.tfm_ns
+  platforms:
+    - nrf9160dk_nrf9160_ns
+  comment: "https://nordicsemi.atlassian.net/browse/NCSDK-24917"
+
+- scenarios:
+    - libraries.hash_map.newlib.cxx_unordered_map.djb2
+  platforms:
+    - nrf52dk_nrf52832
+    - nrf9160dk_nrf9160_ns
+    - mps2_an521
+    - qemu_cortex_m3
+    - nrf5340dk_nrf5340_cpuapp_ns
+    - nrf52840dk_nrf52840
+    - nrf9160dk_nrf9160
+    - nrf5340dk_nrf5340_cpuapp
+    - nrf5340dk_nrf5340_cpunet
+  comment: "https://nordicsemi.atlassian.net/browse/NCSDK-21219"
+
+- scenarios:
+    - mcuboot.recovery.retention
+    - mcuboot.recovery.retention.mem
+  platforms:
+    - nrf52840dk_nrf52840
+  comment: "https://nordicsemi.atlassian.net/browse/NCSDK-24920"
+
+- scenarios:
+    - mgmt.mcumgr.all.options
+    - mgmt.mcumgr.all.options.other
+  platforms:
+    - nrf52840dk_nrf52840
+  comment: "https://nordicsemi.atlassian.net/browse/NCSDK-24921"
+
+- scenarios:
+    - sample.bluetooth.central.multilink
+    - sample.bluetooth.peripheral_identity
+  platforms:
+    - nrf52840dk_nrf52840
+  comment: "https://nordicsemi.atlassian.net/browse/NCSDK-24923"
+
+- scenarios:
+    - drivers.display.default
+    - drivers.display.read_write.sdl.argb8888
+    - drivers.display.read_write.sdl.bgr565
+    - drivers.display.read_write.sdl.mono01
+    - drivers.display.read_write.sdl.mono01.lsbfirst
+    - drivers.display.read_write.sdl.mono10
+    - drivers.display.read_write.sdl.mono10.lsbfirst
+    - drivers.display.read_write.sdl.rgb565
+    - drivers.display.read_write.sdl.rgb888
+    - sample.display.builtin
+    - sample.display.lvgl.gui
+    - sample.modules.lvgl.accelerometer_chart
+    - sample.modules.lvgl.demo_music
+    - sample.modules.lvgl.demo_benchmark
+    - sample.modules.lvgl.demo_stress
+    - sample.modules.lvgl.demo_widgets
+  platforms:
+    - native_posix
+  comment: "https://nordicsemi.atlassian.net/browse/NCSDK-24924"
+
+- scenarios:
+    - sample.drivers.flash.soc_flash_nrf
+  platforms:
+    - nrf9160dk_nrf9160_ns
+  comment: "https://nordicsemi.atlassian.net/browse/NCSDK-24925"
+
+- scenarios:
+    - sample.ipc.openamp
+  platforms:
+    - mps2_an521
+  comment: "https://nordicsemi.atlassian.net/browse/NCSDK-24926"
+
+- scenarios:
+    - sample.mcumgr.smp_svr.mcuboot_flags.direct_xip_withrevert
+  platforms:
+    - nrf52840dk_nrf52840
+  comment: "https://nordicsemi.atlassian.net/browse/NCSDK-24927"
+
+- scenarios:
+    - sample.mgmt.osdp.control_panel
+    - sample.mgmt.osdp.control_panel_sc
+    - sample.mgmt.osdp.peripheral_device
+    - sample.mgmt.osdp.peripheral_device_sc
+  platforms:
+    - nrf5340dk_nrf5340_cpuapp_ns
+    - nrf9160dk_nrf9160_ns
+  comment: "https://nordicsemi.atlassian.net/browse/NCSDK-24928"
+
+- scenarios:
+    - sample.bindesc
+  platforms:
+    - nrf5340dk_nrf5340_cpuapp_ns
+    - nrf9160dk_nrf9160_ns
+  comment: "https://nordicsemi.atlassian.net/browse/NCSDK-25551"
+
+- scenarios:
+    - net.ip-addr
+  comment: "Fixed with https://github.com/zephyrproject-rtos/zephyr/pull/68463"
+
+- scenarios:
+    - examples.nrfx_uarte.tx_rx_non_blocking
+  platforms:
+    - nrf9160dk_nrf9160
+    - nrf52840dk_nrf52840
+  comment: "https://nordicsemi.atlassian.net/browse/NRFX-3395"
+
+- scenarios:
+    - examples.nrfx_uarte.rx_double_buffered
+  platforms:
+    - nrf52840dk_nrf52840
+    - nrf9160dk_nrf9160
+    - nrf5340dk_nrf5340_cpuapp
+    - nrf52833dk_nrf52833
+  comment: "https://nordicsemi.atlassian.net/browse/NRFX-3468"
+
+- scenarios:
+    - examples.nrfx_uarte.tx_rx_non_blocking
+  platforms:
+    - nrf5340dk_nrf5340_cpuapp
+    - nrf52833dk_nrf52833
+  comment: "https://nordicsemi.atlassian.net/browse/NRFX-3468"
+
+- scenarios:
+    - examples.nrfx_saadc.maximum_performance
+  platforms:
+    - nrf52840dk_nrf52840
+    - nrf52833dk_nrf52833
+    - nrf9160dk_nrf9160
+  comment: "https://nordicsemi.atlassian.net/browse/NRFX-3813"
+
+# ---------------------------------   Won't fix section -----------------------------------
+
+- scenarios:
+    - libraries.encoding.jwt
+  platforms:
+    - nrf5340dk_nrf5340_cpuapp_ns
+    - nrf9160dk_nrf9160_ns
+  comment: "Won't be fixed - https://nordicsemi.atlassian.net/browse/NCSDK-15508"
+
+- scenarios:
+    - net.mqtt.tls
+  platforms:
+    - nrf9160dk_nrf9160_ns
+    - nrf5340dk_nrf5340_cpuapp_ns
+  comment: "Won't be fixed - https://nordicsemi.atlassian.net/browse/NCSDK-24922"
+
+- scenarios:
+    - net.socket.register.tls
+  platforms:
+    - nrf5340dk_nrf5340_cpuapp_ns
+    - nrf9160dk_nrf9160_ns
+  comment: "Won't be fixed - https://nordicsemi.atlassian.net/browse/NCSDK-18853"
+
+- scenarios:
+    - sample.tfm.regression_ipc_lvl1
+    - sample.tfm.regression_ipc_lvl2
+    - sample.tfm.regression_sfn
+    - sample.tfm.psa_test_protected_storage
+    - sample.tfm.psa_test_internal_trusted_storage
+    - sample.tfm.psa_test_storage
+    - sample.tfm.psa_test_crypto
+  comment: "Won't be fixed - We have our own copy of these regression tests in nrf"
+
+- scenarios:
+    - libraries.uoscore
+  comment: "Won't be fixes - We don't support uoscore since it doesn't use NRF security"
+
+- scenarios:
+    - sample.drivers.crypto.mbedtls
+  platforms:
+    - nrf9160dk_nrf9160_ns
+    - nrf5340dk_nrf5340_cpuapp_ns
+  comment: "Won't be fixed - https://nordicsemi.atlassian.net/browse/NCSDK-15306"
+
+- scenarios:
+    - sample.net.sockets.websocket_client
+  platforms:
+    - nrf5340dk_nrf5340_cpuapp_ns
+    - nrf9160dk_nrf9160_ns
+  comment: "Won't be fixed - https://nordicsemi.atlassian.net/browse/NCSDK-24929"
+
+- scenarios:
+    - sample.psa_crypto
+  platforms:
+    - nrf5340dk_nrf5340_cpuapp_ns
+    - nrf9160dk_nrf9160_ns
+  comment: "Won't be fixed - https://nordicsemi.atlassian.net/browse/NCSDK-22771"

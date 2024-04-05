@@ -1,0 +1,89 @@
+#
+# Copyright (c) 2020 Nordic Semiconductor
+#
+# SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+#
+
+menu "nRF RPC (Remote Procedure Call) library"
+
+if NRF_RPC
+
+# Zephyr port dependencies selection
+
+config _NRF_RPC_DUMMY_SELECT
+	bool
+	default y
+	select THREAD_CUSTOM_DATA
+
+menuconfig NRF_RPC_IPC_SERVICE
+	bool "nRF RPC over IPC Service"
+	default y
+	select IPC_SERVICE
+	select MBOX
+	select EVENTS
+	help
+	  If enabled, selects the IPC Service as a transport layer for nRF PRC.
+
+if NRF_RPC_IPC_SERVICE
+
+# Redefine this symbol here and give it a non-zero default value
+# so that the Zephyr system heap is enabled, the nRF IPC IPC service
+# depends on it
+config HEAP_MEM_POOL_SIZE
+	int
+	default 2048
+
+config NRF_RPC_IPC_SERVICE_BIND_TIMEOUT_MS
+	int "Timeout while waiting for the endpoint to bind in ms"
+	range 1 1000
+	default 500 if SOC_SERIES_NRF54HX
+	default 100
+	help
+	  Time in miliseconds to wait for endpoint binding.
+	  This timeout depends on the time to initialize all the remote devices
+	  the nRF RPC is going to communicate with.
+
+endif # NRF_RPC_IPC_SERVICE
+
+config NRF_RPC_CBOR
+	bool
+	select ZCBOR
+	select ZCBOR_STOP_ON_ERROR
+
+# End of Zephyr port dependencies selection
+
+config NRF_RPC_THREAD_STACK_SIZE
+	int "Stack size of thread from thread pool"
+	default 1024
+	help
+	  Stack size for each thread in local thread pool.
+
+config NRF_RPC_THREAD_PRIORITY
+	int "Priority of thread from thread pool"
+	default 2
+	help
+	  Thread priority of each thread in local thread pool.
+
+module = NRF_RPC
+module-str = NRF_RPC
+source "${ZEPHYR_BASE}/subsys/logging/Kconfig.template.log_config"
+
+module = NRF_RPC_TR
+module-str = NRF_RPC_TR
+source "${ZEPHYR_BASE}/subsys/logging/Kconfig.template.log_config"
+
+module = NRF_RPC_OS
+module-str = NRF_RPC_OS
+source "${ZEPHYR_BASE}/subsys/logging/Kconfig.template.log_config"
+
+if NRF_RPC_CBOR
+
+module = NRF_RPC_CBOR
+module-str = NRF_RPC_CBOR
+source "${ZEPHYR_BASE}/subsys/logging/Kconfig.template.log_config"
+
+endif # NRF_RPC_CBOR
+
+endif # NRF_RPC
+
+endmenu

@@ -1,0 +1,17 @@
+aenum
+bitarray
+chardet
+gitlint==0.18.0
+GitPython==3.1.41
+jsonschema
+milksnake
+py
+pyparsing
+python-stdnum
+pytz
+pyusb
+qrcode
+stringcase==1.2.0
+typed-ast
+toml
+wget

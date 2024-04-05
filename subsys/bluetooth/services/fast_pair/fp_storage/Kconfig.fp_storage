@@ -1,0 +1,76 @@
+#
+# Copyright (c) 2022 Nordic Semiconductor ASA
+#
+# SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+#
+
+config BT_FAST_PAIR_STORAGE
+	bool
+	default y
+	select SETTINGS
+	help
+	  Add Fast Pair storage source files.
+
+if BT_FAST_PAIR_STORAGE
+
+config BT_FAST_PAIR_STORAGE_MANAGER
+	bool
+	default y
+	help
+	  Add Fast Pair storage manager source files.
+
+config BT_FAST_PAIR_STORAGE_USER_RESET_ACTION
+	bool "Enable user reset action during factory reset"
+	help
+	  Enable user reset action that executes together with the Fast Pair factory reset
+	  operation within the bt_fast_pair_factory_reset API function. To define the user reset
+	  action, you need to override the weak function definition of the
+	  bt_fast_pair_factory_reset_user_action_perform symbol. Optionally, you can override the
+	  bt_fast_pair_factory_reset_user_action_prepare symbol if you want an earlier notification
+	  that the reset operation is due to begin.
+
+config BT_FAST_PAIR_STORAGE_AK
+	bool
+	default y
+	help
+	  Add Fast Pair storage of Account Keys source files.
+
+config BT_FAST_PAIR_STORAGE_ACCOUNT_KEY_MAX
+	int "Maximum number of stored Account Keys"
+	range 5 10
+	default 5
+	help
+	  Maximum number of stored account keys. According to Fast Pair specification, it should be
+	  at least equal to 5. It can not be larger than 10, because then Account Key Filter length
+	  would not fit in the "field length and type" data field specified in the non-discoverable
+	  advertising packet.
+
+config BT_FAST_PAIR_STORAGE_EXPOSE_PRIV_API
+	bool "Expose private API"
+	depends on !BT_FAST_PAIR
+	help
+	  Expose Fast Pair storage's private data structures, definitions and functionalities.
+	  The option could be used by unit tests to prepopulate settings with mocked data.
+
+config BT_FAST_PAIR_STORAGE_PN
+	bool
+	help
+	  Add Fast Pair storage source files for Personalized Name extension.
+
+if BT_FAST_PAIR_STORAGE_PN
+
+config BT_FAST_PAIR_STORAGE_PN_LEN_MAX
+	int "Maximum length of stored Fast Pair Personalized Name"
+	range 64 1024
+	default 64
+	help
+	  Maximum length of stored Fast Pair Personalized Name. According to Fast Pair
+	  specification, it should be at least equal to 64.
+
+endif # BT_FAST_PAIR_STORAGE_PN
+
+module = FP_STORAGE
+module-str = Fast Pair storage library
+source "${ZEPHYR_BASE}/subsys/logging/Kconfig.template.log_config"
+
+endif # BT_FAST_PAIR_STORAGE

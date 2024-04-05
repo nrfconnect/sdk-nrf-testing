@@ -1,0 +1,122 @@
+#
+# Copyright (c) 2018-2023 Nordic Semiconductor
+#
+# SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+#
+
+# Usually BOARD_DIR is an absolute path and sourced through '<ZEPHYR_ROOT>/boards/Kconfig'.
+# But for compliance and doc generation it's a glob and this line ensures that
+# boards in sdk-nrf are sourced properly in those occasions.
+orsource "./$(BOARD_DIR)/Kconfig.board"
+orsource "./$(BOARD_DIR)/Kconfig"
+
+rsource "boards/shields/*/Kconfig.shield"
+rsource "subsys/net/openthread/Kconfig.defconfig"
+
+if !TFM_PROFILE_TYPE_MINIMAL
+rsource "modules/trusted-firmware-m/Kconfig.mbedtls.defconfig"
+endif # ! TFM_PROFILE_TYPE_MINIMAL
+
+if TFM_PROFILE_TYPE_MINIMAL
+rsource "modules/trusted-firmware-m/Kconfig.mbedtls_minimal.defconfig"
+rsource "modules/trusted-firmware-m/Kconfig.tfm_minimal.defconfig"
+endif # TFM_PROFILE_TYPE_MINIMAL
+
+if BUILD_WITH_TFM
+rsource "modules/trusted-firmware-m/Kconfig.psa.defconfig"
+endif # BUILD_WITH_TFM
+
+menu "Nordic nRF Connect"
+
+# Hides child parent configuration options
+config HIDE_CHILD_PARENT_CONFIG
+	bool
+	default y if "$(HIDE_CHILD_PARENT_CONFIG)" = "True"
+	default n
+
+# Override boot banner
+config BOOT_BANNER_STRING
+	default "Booting nRF Connect SDK"
+
+# Override configuration from zephyr which sets this to 0x200 if MCUboot is
+# enabled (CONFIG_BOOTLOADER_MCUBOOT), since NCS use partition_manager to
+# get this offset intsead.
+config ROM_START_OFFSET
+	default 0 if PARTITION_MANAGER_ENABLED
+
+# nRF Connect SDK default experimental warnings to on.
+config WARN_EXPERIMENTAL
+	default y
+
+# Zephyr default is newlib and not newlib-nano for consistency between architectures.
+# To reduce FLASH footprint, newlib-nano is preferred default in NCS when newlib is selected.
+config NEWLIB_LIBC_NANO
+	default y
+	depends on NEWLIB_LIBC && HAS_NEWLIB_LIBC_NANO
+
+# This is a temporary solution to whitelist
+# BOARD_THINGY91_NRF9160_NS in compliance
+config BOARD_THINGY91_NRF9160_NS
+	bool
+
+# memfault depends on the now removed NET_SOCKETS_OFFLOAD_TLS symbol.
+# Until an updated memfault sdk is released, we define this as a promptless
+# symbol here.
+config NET_SOCKETS_OFFLOAD_TLS
+	bool
+
+# nRF Connect SDK needs a larger default stacks in certain configurations
+#  - For running tests.
+#  - For CC3XX RNG
+config MAIN_STACK_SIZE
+	default 2048 if ZTEST
+	default 2048 if ENTROPY_CC3XX && !BUILD_WITH_TFM
+
+config ZTEST_STACK_SIZE
+	default 2048 if ZTEST
+
+config PRIVILEGED_STACK_SIZE
+	default 2048 if ZTEST
+
+# nRF Connect SDK needs larger mcumgr buffers when supporting multi-image DFU
+# or when the Bluetooth Reassembly feature is enabled.
+config MCUMGR_TRANSPORT_NETBUF_SIZE
+	default 2475 if MCUMGR_TRANSPORT_BT_REASSEMBLY
+	default 1024 if UPDATEABLE_IMAGE_NUMBER > 1
+
+# When using HCI on the nRF5340 we need a larger command buffer.
+config BT_BUF_CMD_TX_COUNT
+	default 10 if SOC_COMPATIBLE_NRF5340_CPUAPP || SOC_COMPATIBLE_NRF5340_CPUNET
+
+config INIT_ARCH_HW_AT_BOOT
+	default y
+	help
+	  The image will be booted directly by an unknown image which might not
+	  leave the system in a clean state, so it is necessary to perform
+	  architecture specific hardware initialization.
+
+DT_COMPAT_NORDIC_QSPI_NOR := nordic,qspi-nor
+config NORDIC_QSPI_NOR
+	default y if $(dt_compat_on_bus,$(DT_COMPAT_NORDIC_QSPI_NOR),qspi) && PM_EXTERNAL_FLASH_MCUBOOT_SECONDARY && !SPI_NOR
+
+DT_ZEPHYR_FLASH := zephyr,flash
+DT_CHOSEN_ZEPHYR_FLASH := $(dt_chosen_path,$(DT_ZEPHYR_FLASH))
+config NORDIC_QSPI_NOR_FLASH_LAYOUT_PAGE_SIZE
+	default $(dt_node_int_prop_int,$(DT_CHOSEN_ZEPHYR_FLASH),erase-block-size)
+	help
+	  Set the flash layout page size equal to the erase block size of the
+	  chosen Zephyr flash devicetree node to ensure that swapping can be
+	  performed.
+
+config GETOPT
+	default n
+
+rsource "samples/Kconfig"
+rsource "subsys/Kconfig"
+rsource "modules/Kconfig"
+rsource "lib/Kconfig"
+rsource "drivers/Kconfig"
+rsource "ext/Kconfig"
+rsource "tests/Kconfig"
+
+endmenu

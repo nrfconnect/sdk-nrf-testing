@@ -1,0 +1,73 @@
+#
+# Copyright (c) 2022 Nordic Semiconductor
+#
+# SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+#
+
+# This file contains extra images which can be used with sysbuild based builds.
+
+menuconfig PARTITION_MANAGER
+	bool "Partition Manager"
+	default y if ($(BOARD) != "qemu_cortex_m0" && \
+		      $(BOARD) != "qemu_cortex_m3" && \
+		      $(BOARD) != "native_posix" && \
+		      $(BOARD) != "native_posix_64" && \
+		      $(BOARD) != "mps2_an521" && \
+		      $(BOARD) != "qemu_x86" && \
+		      $(BOARD) != "nrf52_bsim" && \
+		      $(BOARD) != "nrf5340bsim_nrf5340_cpuapp" && \
+		      $(BOARD) != "nrf5340bsim_nrf5340_cpunet" && \
+		      $(BOARD) != "nrf54h20dk_nrf54h20_cpuapp")
+	depends on !EXTERNAL_CONFIGURED_NETCORE
+
+config PM_MCUBOOT_PAD
+	hex "Memory reserved for MCUBOOT_PAD"
+	default 0x800 if $(BOARD) = "nrf54l15pdk_nrf54l15_cpuapp"
+	default 0x200
+	depends on BOOTLOADER_MCUBOOT
+	depends on PARTITION_MANAGER
+	help
+	  MCUBOOT_PAD size in partition file.
+	  This value is default 0x200 but if using static partitions having a
+	  different padding size, then this value must be updated to correspond
+	  to the value in the static partition file.
+
+config PM_OVERRIDE_EXTERNAL_DRIVER_CHECK
+	bool "Override external driver check"
+	depends on PARTITION_MANAGER
+	help
+	  When enabled, will include all external flash stroage areas without
+	  being gated on the NORDIC_QSPI_NOR Kconfig, can be enabled to use
+	  non-QSPI external flash chips from partition manager.
+
+config BUILD_OUTPUT_BIN
+	bool "Build a binary in BIN format"
+	default y
+	help
+	  Build a "raw" binary zephyr/zephyr.bin in the build directory.
+	  The name of this file can be customized with CONFIG_KERNEL_BIN_NAME.
+	  This will be applied to all target images.
+
+config BUILD_OUTPUT_HEX
+	bool "Build a binary in HEX format"
+	default y
+	help
+	  Build an Intel HEX binary zephyr/zephyr.hex in the build directory.
+	  The name of this file can be customized with CONFIG_KERNEL_BIN_NAME.
+	  This will be applied to all target images.
+
+if BOOTLOADER_MCUBOOT
+
+choice BOOT_SIGNATURE_TYPE
+	default BOOT_SIGNATURE_TYPE_ECDSA_P256
+
+endchoice
+
+endif
+
+rsource "Kconfig.netcore"
+rsource "Kconfig.secureboot"
+rsource "Kconfig.mcuboot"
+rsource "Kconfig.dfu"
+rsource "Kconfig.xip"
+rsource "Kconfig.bt_fast_pair"

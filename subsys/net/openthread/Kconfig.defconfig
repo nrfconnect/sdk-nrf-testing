@@ -1,0 +1,283 @@
+# Copyright (c) 2021 Nordic Semiconductor
+#
+# SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+#
+
+# The purpose of this file is to define new default values of settings related
+# to building Thread from sources.
+# This file only changes defaults and thus all symbols here must be prompltless
+# and safeguarded so that they only are applied when building Thread.
+
+if NET_L2_OPENTHREAD
+
+choice OPENTHREAD_STACK_VERSION
+	default OPENTHREAD_THREAD_VERSION_1_3
+endchoice
+
+config OPENTHREAD_LIBRARY_AVAILABLE
+	bool
+	# Switch:
+	# - To `y` when libraries for the current OpenThread revision are provided
+	# - To `n` on the next OpenThread upmerge
+	default n
+	depends on OPENTHREAD_THREAD_VERSION_1_3
+	depends on (OPENTHREAD_NORDIC_LIBRARY_MASTER && SOC_NRF52840) || \
+		    OPENTHREAD_NORDIC_LIBRARY_FTD || OPENTHREAD_NORDIC_LIBRARY_MTD
+	depends on !OPENTHREAD_COPROCESSOR
+	depends on SOC_NRF52840 || SOC_NRF5340_CPUAPP
+	depends on FPU
+
+choice OPENTHREAD_IMPLEMENTATION
+	default OPENTHREAD_LIBRARY if OPENTHREAD_LIBRARY_AVAILABLE
+endchoice
+
+if SOC_SERIES_NRF54LX
+
+#To be removed
+config OBERON_BACKEND
+	bool
+	default y
+
+#To be removed
+config PSA_CRYPTO_DRIVER_OBERON
+	bool
+	default y
+
+#To be removed
+config PSA_CRYPTO_DRIVER_CRACEN
+	bool
+	default y
+
+endif
+if SOC_NRF54H20_CPUAPP
+
+#To be removed
+config ENTROPY_TEST_PRNG
+	bool
+	default y
+
+#To be removed
+config IPC_SERVICE_BACKEND_RPMSG_SHMEM_RESET
+	bool
+	   default y
+
+#To be removed
+config MBOX
+	bool
+	default y
+
+#To be removed
+config MBOX_NRFX_IDS
+	bool
+	default y
+
+endif
+
+choice LIBC_IMPLEMENTATION
+	default NEWLIB_LIBC
+endchoice
+
+config NEWLIB_LIBC_NANO
+	bool
+	default y
+
+config NUM_METAIRQ_PRIORITIES
+	int
+	default 1
+
+config SYSTEM_WORKQUEUE_STACK_SIZE
+	int
+	default 1120
+
+config MAIN_STACK_SIZE
+	int
+	default 2560
+
+config LOG_BUFFER_SIZE
+	int
+	default 4048 if LOG
+
+config INIT_STACKS
+	bool
+	default y
+
+config NET_IPV6_NBR_CACHE
+	bool
+	default n
+
+config NET_IPV6_MLD
+	bool
+	default n
+
+config NET_PKT_RX_COUNT
+	int
+	default 10
+
+config NET_PKT_TX_COUNT
+	int
+	default 16
+
+config OPENTHREAD_MANUAL_START
+	bool
+	default y
+
+choice OPENTHREAD_SECURITY
+	default OPENTHREAD_NRF_SECURITY_PSA_CHOICE if SOC_FAMILY_NRF
+endchoice
+
+config MBEDTLS_SSL_PROTO_DTLS
+	bool
+	default n if !(OPENTHREAD_JOINER || OPENTHREAD_COMMISSIONER || OPENTHREAD_COAPS)
+	default y
+
+config MBEDTLS_SSL_MAX_FRAGMENT_LENGTH
+	bool
+	default n if !(OPENTHREAD_JOINER || OPENTHREAD_COMMISSIONER || OPENTHREAD_COAPS)
+	default y
+
+config MBEDTLS_ENTROPY_C
+	bool
+	default y
+
+config MBEDTLS_CIPHER_MODE_CBC
+	bool
+	default n
+
+config MBEDTLS_CIPHER_MODE_CTR
+	bool
+	default n
+
+config MBEDTLS_CIPHER_MODE_CFB
+	bool
+	default n
+
+config MBEDTLS_CIPHER_MODE_OFB
+	bool
+	default n
+
+config MBEDTLS_CHACHA20_C
+	bool
+	default n
+
+config MBEDTLS_POLY1305_C
+	bool
+	default n
+
+config MBEDTLS_CHACHAPOLY_C
+	bool
+	default n
+
+config MBEDTLS_DHM_C
+	bool
+	default n
+
+config MBEDTLS_RSA_C
+	bool
+	default n
+
+config MBEDTLS_SHA512_C
+	bool
+	default n
+
+config MBEDTLS_GCM_C
+	bool
+	default n
+
+config MBEDTLS_CIPHER_MODE_XTS
+	bool
+	default n
+
+if !(OPENTHREAD_BORDER_AGENT || OPENTHREAD_COMMISSIONER || OPENTHREAD_COAPS)
+
+config MBEDTLS_SSL_SRV_C
+	bool
+	default n
+
+config MBEDTLS_SSL_COOKIE_C
+	bool
+	default n
+
+endif # !(OPENTHREAD_BORDER_AGENT || OPENTHREAD_COMMISSIONER || OPENTHREAD_COAPS)
+
+if !(OPENTHREAD_JOINER || OPENTHREAD_COMMISSIONER || OPENTHREAD_COAPS)
+
+config MBEDTLS_SSL_CLI_C
+	bool
+	default n
+
+config MBEDTLS_SSL_TLS_C
+	bool
+	default n
+
+endif # !(OPENTHREAD_JOINER || OPENTHREAD_COMMISSIONER || OPENTHREAD_COAPS)
+
+# Note: MBEDTLS_HEAP_SIZE value for OPENTHREAD_NRF_SECURITY_PSA is experimental.
+# It might be changed in the future.
+config MBEDTLS_HEAP_SIZE
+	int
+	default 15360 if OPENTHREAD_NRF_SECURITY_PSA
+	default 12440 if !OPENTHREAD_NRF_SECURITY_PSA
+
+config OPENTHREAD_PING_SENDER
+	bool
+	default y
+
+if !OPENTHREAD_THREAD_VERSION_1_1
+
+# Thread 1.2 dependencies
+config NRF_802154_ENCRYPTION
+	bool
+	default y
+
+config NET_PKT_TXTIME
+	bool
+	default y
+
+config NET_PKT_TIMESTAMP
+	bool
+	default y
+
+# CSL Transmitter configuration
+config OPENTHREAD_PLATFORM_CSL_UNCERT
+	int
+	default 12
+
+config IEEE802154_NRF5_DELAY_TRX_ACC
+	int
+	default 50 if BOARD_NRF52840DONGLE_NRF52840
+	default 20
+
+if OPENTHREAD_CSL_RECEIVER
+
+config IEEE802154_CSL_ENDPOINT
+	bool
+	default y
+
+config OPENTHREAD_CSL_RECEIVE_TIME_AHEAD
+	int
+	default 5000
+
+config OPENTHREAD_MIN_RECEIVE_ON_AHEAD
+	int
+	default 104
+
+config OPENTHREAD_MIN_RECEIVE_ON_AFTER
+	int
+	default 0
+
+config OPENTHREAD_CSL_TIMEOUT
+	int
+	default 20
+
+config OPENTHREAD_CSL_RECEIVER_LOCAL_TIME_SYNC
+	bool
+	default y if NRF_802154_SER_HOST
+
+endif # OPENTHREAD_CSL_RECEIVER
+
+endif # !OPENTHREAD_THREAD_VERSION_1_1
+
+config OPENTHREAD_TCP_ENABLE
+	select EXPERIMENTAL
+
+endif # NET_L2_OPENTHREAD

@@ -1,0 +1,39 @@
+sample:
+  name: nRF Machine Learning
+  description: Machine learning application reference design
+tests:
+  applications.machine_learning.zdebug:
+    build_only: true
+    platform_allow: >
+      nrf52840dk_nrf52840 thingy53_nrf5340_cpuapp thingy53_nrf5340_cpuapp_ns
+      nrf5340dk_nrf5340_cpuapp
+    integration_platforms:
+      - nrf52840dk_nrf52840
+      - thingy53_nrf5340_cpuapp
+      - thingy53_nrf5340_cpuapp_ns
+      - nrf5340dk_nrf5340_cpuapp
+    tags: ci_build
+  applications.machine_learning.zdebug_nus:
+    build_only: true
+    platform_allow: nrf52840dk_nrf52840
+    integration_platforms:
+      - nrf52840dk_nrf52840
+    tags: ci_build
+    extra_args: CONF_FILE=prj_nus.conf
+  applications.machine_learning.zdebug_rtt:
+    build_only: true
+    platform_allow: thingy53_nrf5340_cpuapp thingy53_nrf5340_cpuapp_ns
+    integration_platforms:
+      - thingy53_nrf5340_cpuapp
+      - thingy53_nrf5340_cpuapp_ns
+    tags: ci_build
+    extra_args: CONF_FILE=prj_rtt.conf
+  applications.machine_learning.zrelease:
+    build_only: true
+    platform_allow: nrf52840dk_nrf52840 thingy53_nrf5340_cpuapp thingy53_nrf5340_cpuapp_ns
+    integration_platforms:
+      - nrf52840dk_nrf52840
+      - thingy53_nrf5340_cpuapp
+      - thingy53_nrf5340_cpuapp_ns
+    tags: ci_build
+    extra_args: CONF_FILE=prj_release.conf

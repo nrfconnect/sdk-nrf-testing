@@ -1,0 +1,5 @@
+bt_fast_pair:
+  placement:
+    before: end
+    align: {start: 0x04}
+  size: 0x48

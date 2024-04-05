@@ -1,0 +1,12 @@
+#include <autoconf.h>
+
+settings_storage:
+  placement:
+    before: [tfm_storage, end]
+#ifdef CONFIG_PM_PARTITION_REGION_SETTINGS_STORAGE_EXTERNAL
+  region: external_flash
+#else
+    align: {start: CONFIG_PM_PARTITION_ALIGN_SETTINGS_STORAGE}
+  inside: [nonsecure_storage]
+#endif
+  size: CONFIG_PM_PARTITION_SIZE_SETTINGS_STORAGE
