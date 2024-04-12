@@ -4,6 +4,8 @@
 # SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
 #
 
+# test
+
 add_subdirectory_ifdef(CONFIG_SENSOR sensor)
 add_subdirectory_ifdef(CONFIG_NETWORKING net)
 
