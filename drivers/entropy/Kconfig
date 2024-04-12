@@ -3,6 +3,8 @@
 # Copyright (c) 2019 Nordic Semiconductor
 #
 # SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+#
+# Test
 
 config ENTROPY_CC3XX
 	bool "Arm CC3XX RNG driver for Nordic devices"
