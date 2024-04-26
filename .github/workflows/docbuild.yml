@@ -30,8 +30,13 @@ jobs:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
     steps:
-      - name: Checkout sources
-        uses: nordicbuilder/action-checkout-west-update@main
+    #  - name: Checkout sources
+    #    uses: nordicbuilder/action-checkout-west-update@main
+      - name: Checkout the code
+        uses: actions/checkout@v3
+        with:
+          path: ncs/nrf
+          fetch-depth: 0
 
       - name: cache-pip
         uses: actions/cache@v3
