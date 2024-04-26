@@ -12,7 +12,7 @@ MCUboot is a secure bootloader for 32-bit microcontrollers.
 Overview
 ********
 
-MCUboot defines a common infrastructure for the bootloader and the system flash layout on microcontroller systems, and provides a secure bootloader that enables easy software upgrade.
+MCUboot defines a co mmon infrastructure for the bootloader and the system flash layout on microcontroller systems, and provides a secure bootloader that enables easy software upgrade.
 
 MCUboot is not dependent on any specific operating system and hardware and relies on hardware porting layers from the operating system it works with.
 Currently MCUboot works with the various operating systems and SDKs, such as Zephyr and the nRF Connect SDK.
