@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
  */
 
+
+
 #include <zephyr/init.h>
 #include <stdio.h>
 #include <stdlib.h>
