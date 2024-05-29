@@ -15,8 +15,8 @@
 
 
 # Invividual folders
-drivers/**				  @nrfconnect/ncs-co-drivers
 drivers/entropy/**			  @nrfconnect/ncs-co-usb @nordic-ncs @jukkar
+drivers/**				  @nrfconnect/ncs-co-drivers
 doc/					  @jukkar
 zephyr/                                   @carlescufi
 
