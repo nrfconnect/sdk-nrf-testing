@@ -111,6 +111,10 @@ manifest:
     #
     # Some of these are also Zephyr modules which have NCS-specific
     # changes.
+    - name: github-action-testing
+      repo-path: github-action-testing
+      path: github-action-testing
+      revision: 84e597398f164630ac24dab1ff85959286b6077a
     - name: hostap
       repo-path: sdk-hostap
       path: modules/lib/hostap
