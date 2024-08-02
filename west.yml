@@ -114,7 +114,7 @@ manifest:
     - name: github-action-testing
       repo-path: github-action-testing
       path: github-action-testing
-      revision: 6c0b007442706797b57b1399523ed1ab430e5847
+      revision: pull/80/head
     - name: hostap
       repo-path: sdk-hostap
       path: modules/lib/hostap
