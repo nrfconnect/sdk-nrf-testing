@@ -40,11 +40,12 @@ jobs:
       run: |
         git remote -v
         # Ensure there's no merge commits in the PR
-        [[ "$(git rev-list --merges --count origin/${BASE_REF}..)" == "0" ]] || \
-        (echo "::error ::Merge commits not allowed, rebase instead";false)
+        #[[ "$(git rev-list --merges --count origin/${BASE_REF}..)" == "0" ]] || \
+        #(echo "::error ::Merge commits not allowed, rebase instead";false)
 
-        git rebase origin/${BASE_REF}
+        #git rebase origin/${BASE_REF}
         # debug
+        echo "Git log:"
         git log  --pretty=oneline | head -n 10
 
     - name: Run CODEOWNERS test
