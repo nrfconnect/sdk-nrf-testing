@@ -38,3 +38,4 @@ jobs:
         echo "Git log:"
         git log  --pretty=oneline | head -n 10
         git show HEAD
+        git rev-parse HEAD^1
