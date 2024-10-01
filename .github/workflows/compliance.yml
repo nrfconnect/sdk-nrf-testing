@@ -35,6 +35,10 @@ jobs:
         # debug
         echo "base.sha: ${BASE_REV}"
         echo "head.sha: ${HEAD_REV}"
+        echo "Branches:"
+        git branch -v
+        echo "Current branch:"
+        git branch --show-current
         echo "Git log:"
         git log  --pretty=oneline | head -n 10
         git show HEAD
