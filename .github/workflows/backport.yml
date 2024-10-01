@@ -4,6 +4,7 @@ on:
     types:
 
 
+
       - closed
       - labeled
     branches:
