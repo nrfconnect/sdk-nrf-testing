@@ -163,7 +163,7 @@
 /modules/coremark/                        @nrfconnect/ncs-si-bluebagel
 
 # Samples
-/samples/                                 @nrfconnect/ncs-code-owners
+#/samples/                                 @nrfconnect/ncs-code-owners
 /samples/CMakeLists.txt                   @nrfconnect/ncs-co-build-system
 /samples/net/                             @nrfconnect/ncs-cia @nrfconnect/ncs-modem
 /samples/sensor/bh1749/                   @nrfconnect/ncs-cia
