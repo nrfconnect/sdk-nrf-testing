@@ -110,3 +110,4 @@ jobs:
       with:
         name: licenses.xml
         path: ncs/${{ inputs.path }}/licenses.xml
+        overwrite: true

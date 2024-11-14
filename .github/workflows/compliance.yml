@@ -79,6 +79,7 @@ jobs:
       with:
         name: compliance.xml
         path: ncs/nrf/compliance.xml
+        overwrite: true
 
     - name: check-warns
       working-directory: ncs/nrf
