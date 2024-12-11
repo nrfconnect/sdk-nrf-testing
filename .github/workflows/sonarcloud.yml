@@ -48,7 +48,7 @@ jobs:
       - name: Build and test
         working-directory: ncs/nrf
         run: |
-          build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} west twister -T . -C --coverage-platform=native_sim -v --inline-logs --integration --subset 1/200
+          build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} west twister -T . -C --coverage-platform=native_sim -v --inline-logs --integration --subset 1/300
 
       - name: Extract coverage into sonarqube xml format
         working-directory: ncs/nrf
