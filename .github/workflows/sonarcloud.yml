@@ -1,0 +1,92 @@
+name: SonarCloud
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - ".github/workflows/docs-build-and-publish.yml"
+      - "docs/**"
+  pull_request:
+    paths:
+      - '**/*.c'
+      - '**/*.h'
+      - west.yml
+      - '**/CMakelists.txt'
+      - '**/Kconfig*'
+      - '**/prj.conf'
+jobs:
+  build:
+    name: Build and analyze
+    runs-on: ubuntu-latest
+    container: ghcr.io/zephyrproject-rtos/ci:v0.27.4
+    env:
+      BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
+      CMAKE_PREFIX_PATH: /opt/toolchains
+    steps:
+      - uses: nrfconnect/action-checkout-west-update@main
+        if: github.event_name == 'pull_request'
+        with:
+          git-ref: ${{ github.event.pull_request.head.sha }}
+          git-fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          path: ncs/nrf
+        
+      - uses: nrfconnect/action-checkout-west-update@main
+        if: github.event_name != 'pull_request'
+        with:
+          git-fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          path: ncs/nrf
+
+      - name: Install dependencies
+        run: |
+            pip install -r ncs/nrf/scripts/requirements-build.txt
+            apt-get update
+            apt-get install -y curl ruby-full
+
+      - name: Install sonar-scanner and build-wrapper
+        uses: SonarSource/sonarcloud-github-c-cpp@v3
+
+      - name: Build and test
+        working-directory: ncs/nrf
+        run: |
+          west twister -T . -C --coverage-platform=native_sim -v --inline-logs --integration
+
+      - name: Extract coverage into sonarqube xml format
+        working-directory: ncs/nrf
+        run: |
+          gcovr twister-out -v --merge-mode-functions=separate --exclude='twister-out|drivers' --sonarqube coverage.xml
+
+      - name: Run sonar-scanner on main
+        working-directory: ncs/nrf
+        if: github.event_name != 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          sonar-scanner \
+            --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}" \
+            --define project.settings=sonar-project.properties \
+            --define sonar.coverageReportPaths=coverage.xml \
+            --define sonar.inclusions=**/*.c,**/*.h \
+            --define sonar.exclusions=tests/,drivers/sensor/*_dummy/
+
+      - name: Run sonar-scanner on PR
+        working-directory: ncs/nrf
+        if: github.event_name == 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+          BASE_REF: ${{ github.event.pull_request.base.ref }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          sonar-scanner \
+            --define sonar.cfamily.build-wrapper-output="${{ env.BUILD_WRAPPER_OUT_DIR }}" \
+            --define project.settings=sonar-project.properties \
+            --define sonar.coverageReportPaths=coverage.xml \
+            --define sonar.inclusions=**/*.c,**/*.h \
+            --define sonar.exclusions=tests/,drivers/sensor/*_dummy/ \
+            --define sonar.scm.revision=${{ env.HEAD_SHA }} \
+            --define sonar.pullrequest.key=${{ env.PR_NUMBER }} \
+            --define sonar.pullrequest.branch=${{ env.PR_BRANCH }} \
+            --define sonar.pullrequest.base=${{ env.BASE_REF }}
