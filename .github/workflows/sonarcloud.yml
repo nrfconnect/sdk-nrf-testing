@@ -4,20 +4,16 @@ on:
     branches:
       - main
     paths-ignore:
-      - ".github/workflows/docs-build-and-publish.yml"
       - "docs/**"
   pull_request:
     paths:
       - '**/*.c'
       - '**/*.h'
-      - west.yml
-      - '**/CMakelists.txt'
-      - '**/Kconfig*'
-      - '**/prj.conf'
+ 
 jobs:
   build:
     name: Build and analyze
-    runs-on: ubuntu-latest
+    runs-on: large16
     container: ghcr.io/zephyrproject-rtos/ci:v0.27.4
     env:
       BUILD_WRAPPER_OUT_DIR: build_wrapper_output_directory # Directory where build-wrapper output will be placed
@@ -41,22 +37,21 @@ jobs:
             pip install -r ncs/nrf/scripts/requirements-build.txt
             apt-get update
             apt-get install -y curl ruby-full
-
       - name: Install sonar-scanner and build-wrapper
         uses: SonarSource/sonarcloud-github-c-cpp@v3
 
       - name: Build and test
-        working-directory: ncs
+        working-directory: ncs/nrf
         run: |
-          build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} ./zephyr/scripts/twister \
-            --ninja --integration --subset 1/300 \
-            --quarantine-list nrf/scripts/quarantine.yaml --quarantine-list nrf/scripts/quarantine_integration.yaml \
-            -T samples
+          build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} ../zephyr/scripts/twister \
+            --ninja --integration \
+            --quarantine-list scripts/quarantine.yaml --quarantine-list scripts/quarantine_integration.yaml \
+            -T applications/asset_tracker_v2
 
       - name: Extract coverage into sonarqube xml format
         working-directory: ncs/nrf
         run: |
-          gcovr twister-out -v --merge-mode-functions=separate --exclude='twister-out|drivers' --sonarqube coverage.xml
+          gcovr twister-out -v --merge-mode-functions=separate --sonarqube coverage.xml
 
       - name: Run sonar-scanner on main
         working-directory: ncs/nrf
