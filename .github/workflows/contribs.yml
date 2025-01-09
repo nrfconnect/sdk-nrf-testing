@@ -5,7 +5,7 @@ on:
 
 jobs:
   contribs:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     name: Contribs
     steps:
       - name: Contribs
