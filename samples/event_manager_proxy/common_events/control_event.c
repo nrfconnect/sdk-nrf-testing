@@ -7,7 +7,7 @@
 #include "control_event.h"
 
 
-static void profile_control_event(struct log_event_buf *buf,
+static int profile_control_event(struct log_event_buf *buf,
 				  const struct app_event_header *aeh)
 {
 }

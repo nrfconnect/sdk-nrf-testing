@@ -157,7 +157,7 @@ class KConfig(dict):
                     configs[kconfig] = value.strip()
                 return configs
         except Exception as err :
-            raise Exception("Unable to parse .config file") from err
+            raise Exception("Unable to parse .config file")
 
     def version_parse(self):
         try:
