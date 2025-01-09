@@ -27,13 +27,14 @@ jobs:
         run: |
           pip3 install -r nrf/scripts/requirements-base.txt
           pip3 install -r nrf/scripts/requirements-extra.txt
+          pip3 inst -r nrf/scripts/requirements-extra.txt
 
       - name: Get repo urls
         working-directory: ncs
         run: |
           echo "SDK_ZEPHYR=$(west list zephyr -f {url} | awk -F// '{print $NF}')" >> $GITHUB_ENV
           echo "SDK_MCUBOOT=$(west list mcuboot -f {url} | awk -F// '{print $NF}')" >> $GITHUB_ENV
-
+#dummy comment 
       - name: Try closing existing auto-upmerge PRs
         run: |
            SDK_ZEPHYR_PR=$(gh pr list --repo $SDK_ZEPHYR --label "auto-upmerge" --json number --jq .[0].number)
