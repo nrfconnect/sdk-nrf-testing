@@ -40,7 +40,8 @@ jobs:
       - name: Install dependencies
         run: |
             apt-get update
-            apt-get install -y curl unzip
+            apt-get install -y curl unzip ruby gcc-multilib make
+
       - name: Install sonar-scanner and build-wrapper
         uses: SonarSource/sonarcloud-github-c-cpp@v3
 
