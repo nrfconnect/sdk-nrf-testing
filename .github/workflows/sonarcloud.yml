@@ -41,6 +41,7 @@ jobs:
         run: |
             apt-get update
             apt-get install -y curl unzip ruby gcc-multilib make
+            df -h
 
       - name: Install sonar-scanner and build-wrapper
         uses: SonarSource/sonarcloud-github-c-cpp@v3
@@ -51,11 +52,12 @@ jobs:
           build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} ../zephyr/scripts/twister \
             --ninja --integration \
             --quarantine-list scripts/quarantine.yaml --quarantine-list scripts/quarantine_integration.yaml \
-            -T applications/asset_tracker_v2
+            -T applications/asset_tracker_v2 -T applications/connectivity_bridge
 
       - name: Extract coverage into sonarqube xml format
         working-directory: ncs/nrf
         run: |
+          df -h
           gcovr twister-out -v --merge-mode-functions=separate --sonarqube coverage.xml
 
       - name: Run sonar-scanner on main
