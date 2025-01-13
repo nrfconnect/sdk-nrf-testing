@@ -48,8 +48,13 @@ jobs:
 
       - name: Build and test
         working-directory: ncs/nrf
+        #run: |
+        #  build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} ../zephyr/scripts/twister \
+        #    --ninja --integration \
+        #    --quarantine-list scripts/quarantine.yaml --quarantine-list scripts/quarantine_integration.yaml \
+        #    -T applications/asset_tracker_v2 -T applications/connectivity_bridge
         run: |
-          build-wrapper-linux-x86-64 --out-dir ${{ env.BUILD_WRAPPER_OUT_DIR }} ../zephyr/scripts/twister \
+          ../zephyr/scripts/twister \
             --ninja --integration \
             --quarantine-list scripts/quarantine.yaml --quarantine-list scripts/quarantine_integration.yaml \
             -T applications/asset_tracker_v2 -T applications/connectivity_bridge
