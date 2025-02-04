@@ -7,7 +7,7 @@ nRF Connect SDK: sdk-nrf
 
 This repository contains the core of nRF Connect SDK, including subsystems,
 libraries, samples, and applications.
-It is also the SDK's west manifest repository, containing the nRF Connect SDK
+It is also the SDK's west manif est repository, containing the nRF Connect SDK
 manifest (west.yml).
 
 Documentation
