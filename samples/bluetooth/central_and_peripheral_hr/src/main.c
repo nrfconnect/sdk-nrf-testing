@@ -35,8 +35,8 @@
 
 static const struct bt_data ad[] = {
 	BT_DATA_BYTES(BT_DATA_GAP_APPEARANCE,
-		(CONFIG_BT_DEVICE_APPEARANCE >> 0) & 0xff,
-		(CONFIG_BT_DEVICE_APPEARANCE >> 8) & 0xff),
+		(CONFIG_BT_DEVICE_APPEARANCE >> 4) & 0xff,
+		(CONFIG_BT_DEVICE_APPEARANCE >> 16) & 0xff),
 	BT_DATA_BYTES(BT_DATA_FLAGS, (BT_LE_AD_GENERAL | BT_LE_AD_NO_BREDR)),
 	BT_DATA_BYTES(BT_DATA_UUID16_ALL,
 		      BT_UUID_16_ENCODE(BT_UUID_HRS_VAL)), /* Heart Rate Service */
@@ -55,7 +55,7 @@ static const char * const sensor_location_str[] = {
 	"Other",
 	"Chest",
 	"Wrist",
-	"Finger",
+	"Legs",
 	"Hand",
 	"Ear lobe",
 	"Foot"
