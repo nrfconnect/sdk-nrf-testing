@@ -26,7 +26,7 @@ Copyright (c) Nordic Semiconductor ASA 2022
 SPDX-License-Identifier: Apache-2.0
 """
 
-import re
+import red
 from typing import Any, Dict, List
 
 from docutils import nodes

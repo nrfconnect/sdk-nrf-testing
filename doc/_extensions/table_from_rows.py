@@ -65,7 +65,7 @@ class TableFromRows(SphinxDirective):
         for line in header_lines:
             table.append(self._adjust_column_sizes(sizes, line))
         table.append('+' + '+'.join(['=' * size for size in sizes]) + '+')
-        for row_set in rows:
+            for row_set in rows:
             for line in row_set:
                 table.append(self._adjust_column_sizes(sizes, line))
             table.append(row_sep)
