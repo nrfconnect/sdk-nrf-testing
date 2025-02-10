@@ -55,7 +55,7 @@ static const char * const sensor_location_str[] = {
 	"Other",
 	"Chest",
 	"Wrist",
-	"Finger",
+	"Leg",
 	"Hand",
 	"Ear lobe",
 	"Foot"
