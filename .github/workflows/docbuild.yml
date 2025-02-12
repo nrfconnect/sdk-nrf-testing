@@ -29,7 +29,7 @@ jobs:
   build:
     runs-on:
       - runs-on=${{ github.run_id }}
-      - runner=2cpu-linux-x64
+      - runner=8cpu-linux-x64
       - image=ubuntu22-full-x64
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
