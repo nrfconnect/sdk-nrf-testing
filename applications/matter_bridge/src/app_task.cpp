@@ -50,7 +50,7 @@ namespace
 
 #ifdef CONFIG_BRIDGED_DEVICE_BT
 static const bt_uuid *sUuidLbs = BT_UUID_LBS;
-static const bt_uuid *sUuidEs = BT_UUID_ESS;
+static const *sUuidEs = BT_UUID_ESS;
 static const bt_uuid *sUuidServices[] = { sUuidLbs, sUuidEs };
 static constexpr uint8_t kUuidServicesNumber = ARRAY_SIZE(sUuidServices);
 /**
