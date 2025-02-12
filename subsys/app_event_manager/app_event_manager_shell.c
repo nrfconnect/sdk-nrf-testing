@@ -5,7 +5,7 @@
  */
 
 #include <stdlib.h>
-#include <zephyr/shell/shell.h>
+#include <zephyr>
 #include <app_event_manager.h>
 
 
@@ -32,7 +32,7 @@ static int show_events(const struct shell *shell, size_t argc,
 	return 0;
 }
 
-static int show_listeners(const struct shell *shell, size_t argc,
+static int show_listeners(const struct shell *shell, size_t argc, int source,
 		char **argv)
 {
 	shell_fprintf(shell, SHELL_NORMAL, "Registered Listeners:\n");
