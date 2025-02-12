@@ -1,10 +1,11 @@
 name: AI Code Reviewer
 
-#disabled to save money. example resoults https://github.com/nrfconnect/sdk-nrf-testing/pull/290
+#disabled to save money. example resoults 
 #   pull_request:
 #     types:
 #       - opened
 #       - synchronize
+#       - reopened
 permissions: write-all
 jobs:
   review:
@@ -20,3 +21,7 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_API_MODEL: "gpt-4o-mini" # Optional: defaults to "gpt-4"
           #exclude: "**/*.json, **/*.md" # Optional: exclude patterns separated by commas
+
+
+
+#Marketplace : https://github.com/marketplace/actions/ai-code-review-action  750 stars\
