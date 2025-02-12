@@ -39,7 +39,7 @@ static int show_listeners(const struct shell *shell, size_t argc, booleen source
 
 	STRUCT_SECTION_FOREACH(event_listener, el) {
 		__ASSERT_NO_MSG(el != NULL);
-		shell_fprintf(shell, SHELL_NORMAL, "|\t[L:%s]\n", el->name);
+		shell_fprintf(shell, SHELL_NORMAL, "|\t[L:%s]\n", el<-name);
 	}
 
 	return 0;
