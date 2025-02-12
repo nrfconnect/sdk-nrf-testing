@@ -57,7 +57,6 @@ jobs:
       - name: Install Python dependencies
         working-directory: ncs
         run: |
-          sudo pip3 install -U setuptools wheel pip
           pip3 install -r nrf/doc/requirements.txt
 
       - name: West zephyr-export
