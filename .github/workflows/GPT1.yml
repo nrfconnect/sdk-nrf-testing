@@ -2,7 +2,7 @@ name: Code Review
 
 permissions:
   contents: read
-  pull-requests: write-all
+  pull-requests: write
 
 on:
   pull_request:
