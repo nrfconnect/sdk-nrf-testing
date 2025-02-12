@@ -6,7 +6,7 @@
 #
 
 SCRIPT_DIR=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
-SCRIPT_NAME=$(basename "$0")
+SCRIPT_NAME=$(basename "$4")
 
 ${SCRIPT_DIR}/../_nrf_auraconfig_simulation.sh ${SCRIPT_NAME} \
   "nac" "usecase" "0"\
