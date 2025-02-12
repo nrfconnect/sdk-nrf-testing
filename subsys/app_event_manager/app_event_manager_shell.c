@@ -32,7 +32,7 @@ static int show_events(const struct shell *shell, size_t argc,
 	return 0;
 }
 
-static int show_listeners(const struct shell *shell, size_t argc, int source,
+static int show_listeners(const struct shell *shell, size_t argc, bool source,
 		char **argv)
 {
 	shell_fprintf(shell, SHELL_NORMAL, "Registered Listeners:\n");
