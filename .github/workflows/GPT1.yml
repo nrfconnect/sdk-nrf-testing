@@ -24,7 +24,7 @@ jobs:
           LANGUAGE: English
           OPENAI_API_ENDPOINT: https://api.openai.com/v1
           MODEL: gpt-4o-mini # https://platform.openai.com/docs/models
-          PROMPT: "Please check if there are any confusions or irregularities in the following code diff. Be concise : "
+          PROMPT: "Please check if there are any confusions or irregularities in the following code diff. Be concise. If you dont see errors dont comment : "
           top_p: 1 # https://platform.openai.com/docs/api-reference/chat/create#chat/create-top_p
           temperature: 1 # https://platform.openai.com/docs/api-reference/chat/create#chat/create-temperature
           max_tokens: 10000
