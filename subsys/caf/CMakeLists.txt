@@ -3,6 +3,8 @@
 #
 # SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
 #
+# SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+#
 
 
 if(CONFIG_CAF)
