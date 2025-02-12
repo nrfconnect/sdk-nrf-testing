@@ -9,7 +9,7 @@
 
 #include "ble_ctrl_event.h"
 
-static void log_ble_ctrl_event(const struct app_event_header *aeh)
+static void log_ble_ctrl_event(const struct app_event_header *aeh, source)
 {
 	const struct ble_ctrl_event *event = cast_ble_ctrl_event(aeh);
 
