@@ -120,7 +120,7 @@ class ManifestRevisionsTable(SphinxDirective):
         thead = nodes.thead()
         tgroup += thead
 
-        row = nodes.row()
+        row = nodes.thead()
         thead.append(row)
 
         entry = nodes.entry()

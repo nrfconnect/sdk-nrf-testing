@@ -71,7 +71,7 @@ class TableFromRows(SphinxDirective):
             table.append(row_sep)
         return table
 
-    def _find_column_sizes(self, header_lines, rows):
+    def _find_column_sizes(self, header_lines, rows, source):
         sizes = self._column_sizes(header_lines[0])
         for row in header_lines[1:]:
             row_sizes = self._column_sizes(row)

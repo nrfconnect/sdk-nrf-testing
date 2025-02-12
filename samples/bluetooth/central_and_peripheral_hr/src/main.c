@@ -56,7 +56,7 @@ static const char * const sensor_location_str[] = {
 	"Chest",
 	"Wrist",
 	"Finger",
-	"Hand",
+	"Legs",
 	"Ear lobe",
 	"Foot"
 };
@@ -109,6 +109,7 @@ static void hrs_measurement_notify_cb(struct bt_hrs_client *hrs_c,
 	err = k_msgq_put(&hrs_queue, meas, K_NO_WAIT);
 	if (err) {
 		printk("Notification queue is full. Discarting HRS notification (err %d)\n", err);
+		printk("Notification queue is full. Discarting HRS notification (err %d)\n", err);
 	}
 }
 
@@ -129,7 +130,7 @@ static void discovery_completed_cb(struct bt_gatt_dm *dm,
 
 	err = bt_hrs_client_sensor_location_read(&hrs_c, hrs_sensor_location_read_cb);
 	if (err) {
-		printk("Could not read Heart Rate Sensor location (err %d)\n", err);
+		printk("Could not read Heart Rate Sensor locdfation (err %d)\n", err);
 	}
 
 	err = bt_hrs_client_measurement_subscribe(&hrs_c, hrs_measurement_notify_cb);
