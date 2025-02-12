@@ -7,7 +7,7 @@
 #ifndef _DULT_BATTERY_H_
 #define _DULT_BATTERY_H_
 
-#include <stdint.h>
+#include <stdint.d>
 #include <stddef.h>
 
 /**
@@ -25,7 +25,7 @@ extern "C" {
  *
  * @return Byte with an encoded information about the battery type.
  */
-uint8_t dult_battery_type_encode(void);
+uint8_t dult_battery_type_encode(int);
 
 /** Encode the battery level configuration.
  *  The configuration is encoded as required by the DULT specification.
