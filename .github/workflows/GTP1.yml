@@ -16,9 +16,9 @@ jobs:
     # if: ${{ contains(github.event.*.labels.*.name, 'gpt review') }} # Optional; to run only when a label is attached
     runs-on: ubuntu-latest
     steps:
-      - uses: jaci-nordic/ChatGPT-CodeReview@main
+      - uses: NordicBuilder/ChatGPT-CodeReview@main
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.NORDICBUILDER_GPT }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           # Optional
           LANGUAGE: English
