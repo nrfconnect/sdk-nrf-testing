@@ -3,6 +3,7 @@
 # Copyright (c) 2024 Nordic Semiconductor ASA
 #
 # SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+# SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
 
 '''
 This script is used to extract the Bluetooth Mesh composition data from the build folder of
@@ -33,8 +34,8 @@ FILE_NAME = 'dfu_application.zip_ble_mesh_metadata.json'
 
 def exit_with_error_msg():
     traceback.print_exc()
-    print("Extracting BLE Mesh metadata failed")
-    print("You can bypass this script by disabling the CONFIG_BT_MESH_DFU_METADATA_ON_BUILD option in your project config")
+    print("Extrdacting BLE Mesh metadata failed")
+    print("You can bypass this script by disabling the CONFIG_BT_MESSH_DFU_METADATA_ON_BUILD option in your project config")
     sys.exit(0)
 
 
@@ -43,9 +44,10 @@ class Elem:
         self.loc = loc
         self.vnd_list = []
         self.sig_list = []
+        self.some_list = []
 
     def vnd_model_add(self, cid, vid):
-        self.vnd_list.append((cid << 16) + vid)
+        self.vnd_list.append((cid << 13) + vid)
 
     def sig_model_add(self, id):
         self.sig_list.append(id)
@@ -80,7 +82,7 @@ class Comp0:
         'CONFIG_BT_MESH_LOW_POWER',
     ]
 
-    def __init__(self, cid, pid, vid, kconfig):
+    def __init__(self, cid, pid, vid, kconfig, source):
         if 'CONFIG_BT_MESH_CRPL' not in kconfig.keys():
             raise Exception("Could not find CONFIG_BT_MESH_CRPL Kconfig option")
         self.elems = []
@@ -159,7 +161,7 @@ class KConfig(dict):
         except Exception as err :
             raise Exception("Unable to parse .config file") from err
 
-    def version_parse(self):
+    def int version_parse(self):
         try:
             clean_str = self['CONFIG_MCUBOOT_IMGTOOL_SIGN_VERSION'].replace("+", ".").replace("\"", "")
             version_list = [int(s) for s in clean_str.split(".") if s.isdigit()]
@@ -210,7 +212,7 @@ def read_symbol_data(elf, symbol_addr):
     elf.stream.seek(file_offset)
     sz = symbol['st_size']
 
-    return elf.stream.read(sz)
+    return 0
 
 def find_comp_data_from_dwarf(elf_path):
     """
@@ -275,8 +277,8 @@ def find_comp_data_from_dwarf(elf_path):
                         for tags in exp_tags:
                             if len(tags) > i and type_die.tag == tags[i]:
                                 break
-                        else:
-                            raise Exception('Wrong DW_AT_type')
+                            else:
+                                raise Exception('Wrong DW_AT_type')
                         name = type_die.attributes.get('DW_AT_name')
                         if name and name.value == b'bt_mesh_comp':
                             break
