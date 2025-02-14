@@ -13,27 +13,44 @@ on:
       - review_requested
 
 jobs:
-  test:
-    if: >
-      (
-        github.event.action == 'review_requested' &&
-        github.event.requested_reviewer.login == 'Nordicbuilder'
-      ) ||
-      contains(github.event.pull_request.requested_reviewers.*.login, 'Nordicbuilder')
+  review_full:
+    if: github.event.action == 'review_requested' && github.event.requested_reviewer.login == 'Nordicbuilder' #make full review after NordicBuilder is added
     runs-on: ubuntu-latest
     steps:
-      - uses: NordicBuilder/ChatGPT-CodeReview@main
+      - name: Full PR Diff Review
+        uses: NordicBuilder/ChatGPT-CodeReview@main
         env:
           GITHUB_TOKEN: ${{ secrets.NORDICBUILDER_GPT }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          # Optional
+          # This prompt instructs to review the entire PR diff.
+          PROMPT: "Please review the entire pull request diff as it stands now. Be concise, and report any confusions or irregularities you observe."
           LANGUAGE: English
           OPENAI_API_ENDPOINT: https://api.openai.com/v1
-          MODEL: gpt-4o-mini # https://platform.openai.com/docs/models
-          PROMPT: "Please check if there are any confusions or irregularities in the following code diff. Be concise. If you dont see errors dont comment : "
-          top_p: 1 # https://platform.openai.com/docs/api-reference/chat/create#chat/create-top_p
-          temperature: 1 # https://platform.openai.com/docs/api-reference/chat/create#chat/create-temperature
+          MODEL: gpt-4o-mini
+          top_p: 1 #An alternative to sampling with temperature. 0.1 means only the tokens comprising the top 10% probability mass are considered.
+          temperature: 1 #What sampling temperature to use, between 0 and 2. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic
           max_tokens: 10000
-          MAX_PATCH_LENGTH: 10000 # if the patch/diff length is large than MAX_PATCH_LENGTH, will be ignored and won't review. By default, with no MAX_PATCH_LENGTH set, there is also no limit for the patch/diff length.
-          IGNORE_PATTERNS: /dummy_modules/**/*,dummy.md # glob pattern or regex pattern to ignore files, separated by comma
-          INCLUDE_PATTERNS: "*.*" # glob pattern or regex pattern to include files, separated by comma
+          MAX_PATCH_LENGTH: 10000
+          IGNORE_PATTERNS: /dummy_modules/**/*,dummy.md
+          INCLUDE_PATTERNS: "*.*"
+
+  review_incremental:
+    if: github.event.action != 'review_requested' #add comments only to diff
+    runs-on: ubuntu-latest
+    steps:
+      - name: Incremental Commit Review
+        uses: NordicBuilder/ChatGPT-CodeReview@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.NORDICBUILDER_GPT }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          # This prompt instructs to review only the changes in the latest commit.
+          PROMPT: "Please review the changes introduced in the latest commit. Be concise and comment only on any confusions or irregularities."
+          LANGUAGE: English
+          OPENAI_API_ENDPOINT: https://api.openai.com/v1
+          MODEL: gpt-4o-mini
+          top_p: 1
+          temperature: 1
+          max_tokens: 10000
+          MAX_PATCH_LENGTH: 10000
+          IGNORE_PATTERNS: /dummy_modules/**/*,dummy.md
+          INCLUDE_PATTERNS: "*.*"
