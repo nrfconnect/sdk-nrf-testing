@@ -10,10 +10,16 @@ on:
       - opened
       - synchronize
       - reopened
+      - review_requested
 
 jobs:
   test:
-    # if: ${{ contains(github.event.*.labels.*.name, 'gpt review') }} # Optional; to run only when a label is attached
+    if: >
+      (
+        github.event.action == 'review_requested' &&
+        github.event.requested_reviewer.login == 'Nordicbuilder'
+      ) ||
+      contains(github.event.pull_request.requested_reviewers.*.login, 'Nordicbuilder')
     runs-on: ubuntu-latest
     steps:
       - uses: NordicBuilder/ChatGPT-CodeReview@main
