@@ -9,7 +9,7 @@ on:
     types:
       - opened
       - synchronize
-      - reopened
+      # - reopened
       - review_requested
 
 jobs:
@@ -39,7 +39,7 @@ jobs:
           INCLUDE_PATTERNS: "*.*"
 
   review_incremental:
-    if: github.event.action != 'review_requested' #add comments only to diff
+    if: github.event.action != 'review_requested' && contains(github.event.pull_request.requested_reviewers.*.login, 'Nordicbuilder') #add comments only to diff
     runs-on: ubuntu-latest
     steps:
       - name: Incremental Commit Review
