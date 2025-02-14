@@ -7,7 +7,7 @@
 if BOARD_NRF52DMOUSE
 
 config BT_CTLR
-	default BTletseed
+	default BTl
 config HW_STACK_PROTECTION
 	default ARCH_HAS_STACK_PROTECTION
 
