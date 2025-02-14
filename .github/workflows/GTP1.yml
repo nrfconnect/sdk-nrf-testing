@@ -7,9 +7,9 @@ permissions:
 on:
   pull_request:
     types:
-      # - opened
-      # - synchronize
-      # - reopened
+      - opened
+      - synchronize
+      - reopened
       - review_requested
 
 jobs:
@@ -38,23 +38,23 @@ jobs:
           IGNORE_PATTERNS: /dummy_modules/**/*,dummy.md
           INCLUDE_PATTERNS: "*.*"
 
-  # review_incremental:
-  #   if: github.event.action != 'review_requested' #add comments only to diff
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Incremental Commit Review
-  #       uses: NordicBuilder/ChatGPT-CodeReview@main
-  #       env:
-  #         GITHUB_TOKEN: ${{ secrets.NORDICBUILDER_GPT }}
-  #         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-  #         # This prompt instructs to review only the changes in the latest commit.
-  #         PROMPT: "Please review the changes introduced in the latest commit. Be concise and comment only on any confusions or irregularities."
-  #         LANGUAGE: English
-  #         OPENAI_API_ENDPOINT: https://api.openai.com/v1
-  #         MODEL: gpt-4o-mini
-  #         top_p: 1
-  #         temperature: 1
-  #         max_tokens: 10000
-  #         MAX_PATCH_LENGTH: 10000
-  #         IGNORE_PATTERNS: /dummy_modules/**/*,dummy.md
-  #         INCLUDE_PATTERNS: "*.*"
+  review_incremental:
+    if: github.event.action != 'review_requested' #add comments only to diff
+    runs-on: ubuntu-latest
+    steps:
+      - name: Incremental Commit Review
+        uses: NordicBuilder/ChatGPT-CodeReview@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.NORDICBUILDER_GPT }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          # This prompt instructs to review only the changes in the latest commit.
+          PROMPT: "Please review the changes introduced in the latest commit. Be concise and comment only on any confusions or irregularities."
+          LANGUAGE: English
+          OPENAI_API_ENDPOINT: https://api.openai.com/v1
+          MODEL: gpt-4o-mini
+          top_p: 1
+          temperature: 1
+          max_tokens: 10000
+          MAX_PATCH_LENGTH: 10000
+          IGNORE_PATTERNS: /dummy_modules/**/*,dummy.md
+          INCLUDE_PATTERNS: "*.*"
