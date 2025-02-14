@@ -7,14 +7,14 @@ permissions:
 on:
   pull_request:
     types:
-      - opened
-      - synchronize
-      - reopened
+      # - opened
+      # - synchronize
+      # - reopened
       - review_requested
 
 jobs:
   review_full:
-    if: github.event.action == 'review_requested' && github.event.requested_reviewer.login == 'Nordicbuilder' #make full review after NordicBuilder is added
+    if: github.event.action == 'review_requested' && github.event.requested_reviewer.login == 'Nordicbuilder'
     runs-on: ubuntu-latest
     steps:
       - name: Full PR Diff Review
@@ -24,6 +24,10 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           # This prompt instructs to review the entire PR diff.
           PROMPT: "Please review the entire pull request diff as it stands now. Be concise, and report any confusions or irregularities you observe."
+          # PROMPT: "Take a deep breath and review all commits in this PR. Be concise, and report any confusions or irregularities you observe."
+          # PROMPT: "Do not print text other than you need to avoid exceeding your token limits. Review all commits in this PR. I only need final answer."
+          # PROMPT: "DO NOT PROVIDE ANY OTHER TEXT THAT THE PYTHON CODE. NOT IN FRONT OF CODE AND NOT AFTER THE CODE!"
+          # PROMPT: "Sanity check user question. If there are typos, fix them. If there are related items that user may have meant, provide all that information instead.""
           LANGUAGE: English
           OPENAI_API_ENDPOINT: https://api.openai.com/v1
           MODEL: gpt-4o-mini
@@ -34,23 +38,23 @@ jobs:
           IGNORE_PATTERNS: /dummy_modules/**/*,dummy.md
           INCLUDE_PATTERNS: "*.*"
 
-  review_incremental:
-    if: github.event.action != 'review_requested' #add comments only to diff
-    runs-on: ubuntu-latest
-    steps:
-      - name: Incremental Commit Review
-        uses: NordicBuilder/ChatGPT-CodeReview@main
-        env:
-          GITHUB_TOKEN: ${{ secrets.NORDICBUILDER_GPT }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          # This prompt instructs to review only the changes in the latest commit.
-          PROMPT: "Please review the changes introduced in the latest commit. Be concise and comment only on any confusions or irregularities."
-          LANGUAGE: English
-          OPENAI_API_ENDPOINT: https://api.openai.com/v1
-          MODEL: gpt-4o-mini
-          top_p: 1
-          temperature: 1
-          max_tokens: 10000
-          MAX_PATCH_LENGTH: 10000
-          IGNORE_PATTERNS: /dummy_modules/**/*,dummy.md
-          INCLUDE_PATTERNS: "*.*"
+  # review_incremental:
+  #   if: github.event.action != 'review_requested' #add comments only to diff
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Incremental Commit Review
+  #       uses: NordicBuilder/ChatGPT-CodeReview@main
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.NORDICBUILDER_GPT }}
+  #         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  #         # This prompt instructs to review only the changes in the latest commit.
+  #         PROMPT: "Please review the changes introduced in the latest commit. Be concise and comment only on any confusions or irregularities."
+  #         LANGUAGE: English
+  #         OPENAI_API_ENDPOINT: https://api.openai.com/v1
+  #         MODEL: gpt-4o-mini
+  #         top_p: 1
+  #         temperature: 1
+  #         max_tokens: 10000
+  #         MAX_PATCH_LENGTH: 10000
+  #         IGNORE_PATTERNS: /dummy_modules/**/*,dummy.md
+  #         INCLUDE_PATTERNS: "*.*"
