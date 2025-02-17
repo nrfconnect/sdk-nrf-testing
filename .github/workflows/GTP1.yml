@@ -7,14 +7,14 @@ permissions:
 on:
   pull_request:
     types:
-      # - opened
-      # - synchronize
-      # - reopened
+      - opened
+      - synchronize
+      - reopened
       - review_requested
 
 jobs:
   review_full:
-    if: github.event.action == 'review_requested' && github.event.requested_reviewer.login == 'Nordicbuilder'
+    # if: github.event.action == 'review_requested' && github.event.requested_reviewer.login == 'Nordicbuilder'
     runs-on: ubuntu-latest
     steps:
       - name: Full PR Diff Review
