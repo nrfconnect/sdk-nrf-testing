@@ -23,9 +23,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.NORDICBUILDER_GPT }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           # This prompt instructs to review the entire PR diff.
-          # PROMPT: "Please review the entire pull request diff as it stands now. Be concise, and report any confusions or irregularities you observe."
+          PROMPT: "Please review the entire pull request diff as it stands now. Be concise, and report any confusions or irregularities you observe."
           # PROMPT: "Take a deep breath and review all commits in this PR. Be concise, and report any confusions or irregularities you observe." To large responses
-          PROMPT: "Do not print text other than you need to avoid exceeding your token limits. Review all commits in this PR. I only need final answer."
+          # PROMPT: "Do not print text other than you need to avoid exceeding your token limits. Review all commits in this PR. I only need final answer."
           # PROMPT: "DO NOT PROVIDE ANY OTHER TEXT THAT THE PYTHON CODE. NOT IN FRONT OF CODE AND NOT AFTER THE CODE!"
           # PROMPT: "Sanity check user question. If there are typos, fix them. If there are related items that user may have meant, provide all that information instead.""
           # LANGUAGE: English
