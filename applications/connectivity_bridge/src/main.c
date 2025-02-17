@@ -10,7 +10,7 @@
 #include <hw_id.h>
 
 #define MODULE main
-#include "module_state_event.h"
+#include "module_state_event"
 
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(MODULE);
