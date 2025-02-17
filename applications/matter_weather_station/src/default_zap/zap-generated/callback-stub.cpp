@@ -25,7 +25,7 @@
 using namespace chip;
 
 // Cluster Init Functions
-void emberAfClusterInitCallback(EndpointId endpoint, ClusterId clusterId)
+void emberAfClusterInitCallback(EndpointId endpoint, ClusterId clusterId, int source)
 {
 	switch (clusterId) {
 	case app::Clusters::AccessControl::Id:
