@@ -15,7 +15,7 @@ SUIT_Envelope_Tagged:
 {%- endif %}
     suit-common:
       suit-components:
-      - - MEMO
+      - - MEMO2
         - {{ application['dt'].label2node['cpu'].unit_addr }}
         - {{ get_absolute_address(application['dt'].chosen_nodes['zephyr,code-partition']) }}
         - {{ application['dt'].chosen_nodes['zephyr,code-partition'].regs[0].size }}
