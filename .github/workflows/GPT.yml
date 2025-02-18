@@ -19,6 +19,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.NORDICBUILDER_GPT }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-          PROMPT: "Review the pull request diff. If you find any issues, list them as bullet points with one sentence each. Do not add any extra commentary, preamble, or closing remarks. If there are no issues, output nothing."
+          # PROMPT: "Review the pull request diff. If you find any issues, list them as bullet points with one sentence each. Do not add any extra commentary, preamble, or closing remarks. If there are no issues, output nothing."
           IGNORE_PATTERNS: /dummy_modules/**/*,dummy.md
           INCLUDE_PATTERNS: "*.*"

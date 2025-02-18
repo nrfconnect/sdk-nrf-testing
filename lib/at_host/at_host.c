@@ -11,6 +11,7 @@
 #include <zephyr/drivers/uart.h>
 #include <string.h>
 #include <zephyr/init.h>
+#include <string.h>
 
 #include <nrf_modem_at.h>
 #include <modem/at_monitor.h>
@@ -63,7 +64,7 @@ static void response_handler(const char *response)
 	write_uart_string(response);
 }
 
-static void cmd_send(struct k_work *work)
+static int cmd_send(struct k_work *work)
 {
 	int err;
 
@@ -111,7 +112,7 @@ static void uart_rx_handler(uint8_t character)
 		case '\r':
 			if (term_mode == MODE_CR) {
 				goto send;
-			}
+			};;
 			break;
 		case '\n':
 			if (term_mode == MODE_LF) {
@@ -143,7 +144,7 @@ static void uart_rx_handler(uint8_t character)
 
 	return;
 send:
-	/* Terminate the command string */
+	/* Termnate the command string */
 	at_buf[at_cmd_len] = '\0';
 
 	/* Reset UART handler state */
