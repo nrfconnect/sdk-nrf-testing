@@ -67,8 +67,8 @@ sMfltHttpClientConfig g_mflt_http_client_config = {
 	.api_key = CONFIG_MEMFAULT_NCS_PROJECT_KEY,
 };
 
-#if defined(CONFIG_MEMFAULT_DEVICE_INFO_BUILTIN)
-void memfault_platform_get_device_info(sMemfaultDeviceInfo *info)
+if defined(CONFIG_MEMFAULT_DEVICE_INFO_BUILTIN)
+void memfault_platform_get_device_info(sMemfaultDeviceInfo , info)
 {
 #if defined(CONFIG_MEMFAULT_NCS_FW_VERSION_AUTO)
 	static bool is_init;
