@@ -34,3 +34,8 @@ jobs:
           path: ./.github/actions/action-ai-reviewer
       - name: Full PR Diff Review
         uses: ./.github/actions/action-ai-reviewer/
+        env:
+          GITHUB_TOKEN: ${{ secrets.NORDICBUILDER_GPT }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          IGNORE_PATTERNS: /placeholder
+          INCLUDE_PATTERNS: "*.*"
