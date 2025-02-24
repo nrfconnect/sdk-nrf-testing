@@ -6,12 +6,11 @@ permissions:
 
 on:
   pull_request:
-    types:
-      - review_requested
+    types: [opened, synchronize, review_requested]
 
 jobs:
   review_full:
-    if: github.event.action == 'review_requested' && github.event.requested_reviewer.login == 'Nordicbuilder'
+    if: contains(github.event.pull_request.requested_reviewers.*.login, 'Nordicbuilder')
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
