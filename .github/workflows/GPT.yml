@@ -10,18 +10,20 @@ on:
       - review_requested
 
 jobs:
+  # review_full:
+  #   if: github.event.action == 'review_requested' && github.event.requested_reviewer.login == 'Nordicbuilder'
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Full PR Diff Review
+  #       uses: NordicBuilder/action-ai-reviewer@takeAllCommits
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.NORDICBUILDER_GPT }}
+  #         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+  #         IGNORE_PATTERNS: /placeholder
+  #         INCLUDE_PATTERNS: "*.*"
   review_full:
     if: github.event.action == 'review_requested' && github.event.requested_reviewer.login == 'Nordicbuilder'
     runs-on: ubuntu-latest
-    steps:
-      # - name: Full PR Diff Review
-      #   uses: NordicBuilder/action-ai-reviewer@takeAllCommits
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.NORDICBUILDER_GPT }}
-      #     OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-      #     IGNORE_PATTERNS: /placeholder
-      #     INCLUDE_PATTERNS: "*.*"
-  review_full:
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
