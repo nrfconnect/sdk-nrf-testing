@@ -33,4 +33,4 @@ jobs:
           token: ${{ secrets.NORDICBUILDER_GPT }}
           path: ./.github/actions/action-ai-reviewer
       - name: Full PR Diff Review
-        uses: ./.github/actions/action-ai-reviewer/GPT.yml
+        uses: ./.github/actions/action-ai-reviewer/
