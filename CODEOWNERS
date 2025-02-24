@@ -7,10 +7,10 @@
 # The default entry with `*` only applies to GitHub adding reviewers.
 # The compliance workflow verifies that all new files are covered by an
 # entry in the CODEOWNERS file, but skips this `*` entry altogether.
-*					  @nrfconnect/ncs-code-owners
+*					  @nrfconnect/ncs-code-owners @NordiBuilder
 
 # Root folder
-/.*					  @nrfconnect/ncs-code-owners
+/.*					  @nrfconnect/ncs-code-owners 
 /CMakeLists.txt                           @nrfconnect/ncs-co-build-system
 /CODEOWNERS                               @nrfconnect/ncs-code-owners
 /Jenkinsfile                              @nrfconnect/ncs-ci
