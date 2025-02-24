@@ -28,8 +28,8 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
         with:
-          repository: NordicBuilder/action-ai-reviewer@takeAllCommits
-          ref: v1.0
+          repository: NordicBuilder/action-ai-reviewer
+          ref: takeAllCommits
           token: ${{ secrets.NORDICBUILDER_GPT }}
           path: ./.github/actions/action-ai-reviewer
       - name: Full PR Diff Review
