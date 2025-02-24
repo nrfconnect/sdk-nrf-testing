@@ -22,7 +22,7 @@
 /west-test.yml                            @nrfconnect/ncs-ci
 
 # Dot folders
-/.github/                                 @nrfconnect/ncs-ci
+/.github/                                 @nrfconnect/ncs-ci @NordicBuilder
 /.github/test-spec.yml                    @nrfconnect/ncs-test-leads
 /.vscode/                                 @FilipZajdel
 
