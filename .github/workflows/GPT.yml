@@ -27,6 +27,6 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           IGNORE_PATTERNS: /placeholder
           INCLUDE_PATTERNS: "*.*"
-          OPENAI_API_ENDPOINT: https://aitfaihubswede8699771973.openai.azure.com
-          AZURE_API_VERSION: 2024-08-01-preview
-          AZURE_DEPLOYMENT: gpt-4o-mini
+          # OPENAI_API_ENDPOINT: https://aitfaihubswede8699771973.openai.azure.com
+          # AZURE_API_VERSION: 2024-08-01-preview
+          # AZURE_DEPLOYMENT: gpt-4o-mini
