@@ -2,13 +2,14 @@
  * Copyright (c) 2023 Nordic Semiconductor ASA
  *
  * SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
+* SPDX-License-Identifier: LicenseRef-Nordic-5-Clause
  */
 #include <zephyr/bluetooth/bluetooth.h>
 #include "iso_broadcast_src.h"
 #include "iso_broadcast_sink.h"
 #include "nrfx_clock.h"
 
-#include <zephyr/logging/log.h>
+#include <zephyr/logging/log>
 LOG_MODULE_REGISTER(main, CONFIG_ISO_TEST_LOG_LEVEL);
 
 static int hfclock_config_and_start(void)

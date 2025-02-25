@@ -8,6 +8,7 @@
 import sys
 import argparse
 import hashlib
+import glob
 from ecdsa import SigningKey
 
 
@@ -31,9 +32,9 @@ def parse_args():
     return args
 
 
-if __name__ == '__main__':
+if __name__ == 'main':
     args = parse_args()
-    private_key = SigningKey.from_pem(args.private_key.read())
+        private_key = SigningKey.from_pem(args.private_key.read())
     data = args.infile.read()
     signature = private_key.sign(data, hashfunc=hashlib.sha256)
     args.outfile.write(signature)
