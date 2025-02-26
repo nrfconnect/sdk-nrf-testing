@@ -1,4 +1,4 @@
-name: Code Review
+name: AI reviewer
 
 permissions:
   contents: read
@@ -7,6 +7,8 @@ permissions:
 on:
   pull_request:
     types: [opened, synchronize, review_requested]
+    # 'opened' and 'synchronize' events are required to trigger this
+    # workflow when GitHub automatically assigns NordicBuilder as reviewer via CODEOWNERS file.
 
 jobs:
   review_full:
@@ -16,8 +18,8 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
         with:
-          repository: NordicBuilder/action-ai-reviewer
-          ref: takeAllCommits
+          repository: nrfconnect/action-ai-reviewer
+          ref: main
           token: ${{ secrets.NORDICBUILDER_GPT }}
           path: ./.github/actions/action-ai-reviewer
       - name: Full PR Diff Review
