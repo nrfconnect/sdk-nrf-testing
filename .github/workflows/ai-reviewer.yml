@@ -15,16 +15,8 @@ jobs:
     if: contains(github.event.pull_request.requested_reviewers.*.login, 'Nordicbuilder')
     runs-on: ubuntu-24.04
     steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-        with:
-          repository: nrfconnect/action-ai-reviewer
-          ref: main
-          token: ''
-          path: ./.github/actions/action-ai-reviewer
-          persist-credentials: false
       - name: Full PR Diff Review
-        uses: ./.github/actions/action-ai-reviewer/
+        uses: nrfconnect/action-ai-reviewer@main
         env:
           GITHUB_TOKEN: ${{ secrets.NORDICBUILDER_GPT }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
