@@ -13,7 +13,7 @@ on:
 jobs:
   review_full:
     if: contains(github.event.pull_request.requested_reviewers.*.login, 'Nordicbuilder')
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -22,6 +22,7 @@ jobs:
           ref: main
           token: ${{ secrets.NORDICBUILDER_GPT }}
           path: ./.github/actions/action-ai-reviewer
+          persist-credentials: false
       - name: Full PR Diff Review
         uses: ./.github/actions/action-ai-reviewer/
         env:
