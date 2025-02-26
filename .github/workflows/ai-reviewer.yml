@@ -5,7 +5,7 @@ permissions:
   pull-requests: write
 
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, synchronize, review_requested]
     # 'opened' and 'synchronize' events are required to trigger this
     # workflow when GitHub automatically assigns NordicBuilder as reviewer via CODEOWNERS file.
