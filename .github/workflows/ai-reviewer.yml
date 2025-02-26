@@ -12,11 +12,10 @@ on:
 
 jobs:
   review_full:
-    if: contains(github.event.pull_request.requested_reviewers.*.login, 'Nordicbuilder')
+    # if: contains(github.event.pull_request.requested_reviewers.*.login, 'Nordicbuilder')
     runs-on: ubuntu-24.04
     steps:
-      - name: Full PR Diff Review
-        uses: nrfconnect/action-ai-reviewer
+      - uses: nrfconnect/action-ai-reviewer
         env:
           GITHUB_TOKEN: ${{ secrets.NORDICBUILDER_GPT }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
