@@ -6,7 +6,7 @@ permissions:
 
 on:
   pull_request:
-    types: [opened, reopnened, synchronize, review_requested]
+    types: [opened, reopened, synchronize, review_requested]
     # 'opened' and 'synchronize' events are required to trigger this
     # workflow when GitHub automatically assigns NordicBuilder as reviewer via CODEOWNERS file.
 
@@ -18,7 +18,7 @@ jobs:
       - name: Full PR Diff Review
         uses: nrfconnect/action-ai-reviewer@main
         env:
-          GITHUB_TOKEN: ${{ secrets.NORDICBUILDER_GPT }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           IGNORE_PATTERNS: /placeholder
           INCLUDE_PATTERNS: "*.*"
