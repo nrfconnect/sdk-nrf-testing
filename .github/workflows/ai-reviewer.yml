@@ -34,14 +34,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{  github.event.pull_request.head.sha }} # This is dangerous without the first access check
-      - name: Run tests
-        run: |
-          if [[ "x${{ secrets.OPENAI_API_KEY }}" == "xval" ]]; then
-            echo "Access to secrets"
-          else
-            echo "No access to secrets"
-            # exit 1
-          fi
+      # - name: Run tests
+      #   run: |
+      #     if [[ "x${{ secrets.OPENAI_API_KEY }}" == "xval" ]]; then
+      #       echo "Access to secrets"
+      #     else
+      #       echo "No access to secrets"
+      #       # exit 1
+      #     fi
       - name: Full PR Diff Review
         uses: nrfconnect/action-ai-reviewer@debug
         env:
