@@ -40,7 +40,7 @@ jobs:
             echo "Access to secrets"
           else
             echo "No access to secrets"
-            exit 1
+            # exit 1
           fi
       - name: Full PR Diff Review
         uses: nrfconnect/action-ai-reviewer@debug
