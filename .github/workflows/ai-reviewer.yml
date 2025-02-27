@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Full PR Diff Review
-        uses: nrfconnect/action-ai-reviewer@debuging
+        uses: nrfconnect/action-ai-reviewer@main
         env:
           GITHUB_TOKEN: ${{ secrets.NORDICBUILDER_GPT }}
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
