@@ -3,7 +3,7 @@
 Samples
 #######
 
-The |NCS| provides samples that specifically target Nordic Semiconductor devices and show how to implement typical use cases with Nordic Semiconductor libraries and drivers.
+The |NCS| provides samples that specifically target Nordic Semico nductor devices and show how to implement typical use cases with Nordic Semiconductor libraries and drivers.
 
 Samples showcase a single feature or library, while :ref:`applications` include a variety of libraries to implement a specific use case.
 
