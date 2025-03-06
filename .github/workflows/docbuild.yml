@@ -27,7 +27,9 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-24.04
+    runs-on:
+      - runs-on=${{ github.run_id }}
+      - runner=8cpu-linux-x64
     concurrency:
       group: ${{ github.workflow }}-${{ github.ref }}
       cancel-in-progress: true
@@ -46,7 +48,7 @@ jobs:
       - name: Install packages
         run: |
           sudo apt update
-          sudo apt-get install -y ninja-build mscgen plantuml
+          sudo apt-get install -y ninja-build mscgen plantuml snapd --allow-change-held-packages
           sudo snap install yq
           DOXYGEN_VERSION=$(yq ".doxygen.version" ./ncs/nrf/scripts/tools-versions-linux.yml)
           wget --no-verbose "https://github.com/doxygen/doxygen/releases/download/Release_${DOXYGEN_VERSION//./_}/doxygen-${DOXYGEN_VERSION}.linux.bin.tar.gz"
