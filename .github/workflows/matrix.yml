@@ -9,11 +9,11 @@ jobs:
       matrix:
         include:
           - os: linux
-            runner: '["runs-on=${{ github.run_id }}", "runner=4cpu-linux-x64"]'
+            runner: '[ "runs-on=${{ github.run_id }}", "runner=4cpu-linux-x64" ]'
           - os: windows
-            runner: windows-latest
+            runner: '["windows-latest"]'
           - os: macos
-            runner: macos-latest
+            runner: '["macos-latest"]'
 
     runs-on: ${{ fromJson(matrix.runner) }}
 
