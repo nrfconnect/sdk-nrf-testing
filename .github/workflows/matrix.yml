@@ -9,22 +9,14 @@ jobs:
       matrix:
         include:
           - os: linux
-            runner:
-              - runs-on=${{ github.run_id }}
-              - runner=4cpu-linux-x64
+            runner: '["runs-on=${{ github.run_id }}", "runner=4cpu-linux-x64"]'
           - os: windows
             runner: windows-latest
           - os: macos
             runner: macos-latest
 
-    runs-on: ${{ matrix.runner }}
+    runs-on: ${{ fromJson(matrix.runner) }}
 
     steps:
-      - name: Print OS
-        run: echo "OS: ${{ matrix.os }}"
-
-      - name: Print runner info
-        run: echo "Runner: ${{ toJson(matrix.runner) }}"
-
       - name: Say pass
         run: echo "pass ✅"
