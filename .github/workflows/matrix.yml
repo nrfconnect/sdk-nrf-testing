@@ -16,7 +16,15 @@ jobs:
             runner: '["macos-latest"]'
 
     runs-on: ${{ fromJson(matrix.runner) }}
-
     steps:
       - name: Say pass
         run: echo "pass ✅"
+
+  test2:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, 'runs-on: runs-on=${{ github.run_id }}/cpu=4']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Say pass2
+        run: echo "pass2 ✅"
