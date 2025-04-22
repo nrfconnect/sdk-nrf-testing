@@ -23,7 +23,7 @@ jobs:
   test2:
     strategy:
       matrix:
-        os2: [ubuntu-latest, windows-latest, "runs-on=${{ github.run_id }}/runner=4cpu-linux-x64"]
+        os2: [windows-latest, "runs-on=${{ github.run_id }}/runner=4cpu-linux-x64"]
     runs-on: ${{ matrix.os2 }}
     steps:
       - name: Say pass2
